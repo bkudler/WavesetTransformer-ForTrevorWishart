@@ -1,0 +1,539 @@
+TITLE:: WavesetTransformer
+summary:: The waveset transformation as describped by Trevor Wishart
+categories:: Wavesets, Microsound
+related:: Classes/Wavesets, Classes/WavesetTransformerPlayer
+​
+DESCRIPTION::
+This creates an interface in SuperCollider for working with all of the waveset transformations described by Trevor Wishart, as recounted by Curtis Road in Microsound, plus a few weird ones I found along the way. This class builds off of Alberto De Campo's brilliant Wavesets class and allows for an easier interface for Waveset transformation. The quark this class is found in comes with a wrapper for this class that allows for even easier waveset transformation, the WavesetTransformerPlayer. Scroll down to examples for an explanation of each transformation and how it is done with this class.
+
+
+​First code examples: 
+​
+code::
+//you'll need a bunch of files to convert to wavesets and preform various transformations
+~files = (
+	\currSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\leaveOneSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\leaveTwoSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\transferSetOne : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\transferSetTwo : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+);
+~waveSetPlayer = WavesetTransformer(20, ~files);
+//lets go
+~waveSetPlayer.go(100).play;
+Synth(\eq,addAction:\addToTail);
+::
+​
+CLASSMETHODS::
+​
+METHOD:: new
+argument:: subBufNum
+argument:: files
+​
+​
+INSTANCEMETHODS::
+​
+METHOD:: mainOut
+​
+METHOD:: deleteDeviation
+​
+METHOD:: reverseLevel
+​
+METHOD:: breakAmount
+​
+METHOD:: moduleSpeedPlusStart
+​
+METHOD:: startAmt
+​
+METHOD:: interleaveTwoNormAmt
+​
+METHOD:: panAmt
+​
+METHOD:: pan
+​
+METHOD:: currSet
+​
+METHOD:: subNormAmt
+​
+METHOD:: panLevel
+​
+METHOD:: harmonizeNormLevel
+​
+METHOD:: transferOneNormLevel
+​
+METHOD:: out
+​
+METHOD:: ampAmt
+​
+METHOD:: interleaveTwoLevel
+​
+METHOD:: transferSetTwo
+​
+METHOD:: multiplier
+​
+METHOD:: reverseNormAmt
+​
+METHOD:: shouldInterleaveTwo
+​
+METHOD:: shouldAverage
+​
+METHOD:: interleaveOneAmt
+​
+METHOD:: speedSwapAmt
+​
+METHOD:: lastAmpAmt
+​
+METHOD:: modulateStart
+​
+METHOD:: useCurrBuf
+​
+METHOD:: reverseAmt
+​
+METHOD:: deleteLevel
+​
+METHOD:: shouldPan
+​
+METHOD:: breakPoint
+​
+METHOD:: deleteAmt
+​
+METHOD:: interleaveOneNormLevel
+​
+METHOD:: setAmpAmt
+argument:: amp
+​
+METHOD:: speedSwapModulo
+​
+METHOD:: harmonizeLevel
+​
+METHOD:: speedChangeModulo
+​
+METHOD:: randomDeleteAmount
+​
+METHOD:: shouldShrink
+​
+METHOD:: shouldRandomDelete
+​
+METHOD:: transferSetOne
+​
+METHOD:: normalizeThresh
+​
+METHOD:: shouldSwap
+​
+METHOD:: deleteNormAmt
+​
+METHOD:: breakPointSet
+​
+METHOD:: shouldSub
+​
+METHOD:: shuffAmount
+​
+METHOD:: panNormAmt
+​
+METHOD:: shouldTransferTwo
+​
+METHOD:: baseSpeed
+​
+METHOD:: averageModulo
+​
+METHOD:: subBuf
+​
+METHOD:: panNormLevel
+​
+METHOD:: waves
+​
+METHOD:: waveSetAmount
+​
+METHOD:: transferTwoLevel
+​
+METHOD:: transferTwoAmt
+​
+METHOD:: interleaveTwoNormLevel
+​
+METHOD:: interleaveTwoAmt
+​
+METHOD:: shouldDelete
+​
+METHOD:: setAmpAdd
+argument:: amp
+​
+METHOD:: switchToSet
+​
+METHOD:: newWaves
+argument:: wave
+​
+METHOD:: breakTop
+​
+METHOD:: repeats
+​
+METHOD:: distance
+​
+METHOD:: leaveTwoSet
+​
+METHOD:: deleteNormLevel
+​
+METHOD:: interleaveOneNormAmt
+​
+METHOD:: modulateSpeed
+​
+METHOD:: inst
+​
+METHOD:: currBuf
+​
+METHOD:: transferTwoNormLevel
+​
+METHOD:: breakBottom
+​
+METHOD:: shouldHarmonize
+​
+METHOD:: deletePauseSet
+​
+METHOD:: reverseNormLevel
+​
+METHOD:: interleaveOneLevel
+​
+METHOD:: shouldNormalize
+​
+METHOD:: randomWave
+​
+METHOD:: transferOneLevel
+​
+METHOD:: shouldReverse
+​
+METHOD:: getWaves
+​
+METHOD:: resetInst
+​
+METHOD:: harmonizeNormAmt
+​
+METHOD:: deleteReceiver
+​
+METHOD:: leaveOneSet
+​
+METHOD:: decBreak
+​
+METHOD:: subNormLevel
+​
+METHOD:: shouldDeletePause
+​
+METHOD:: waveSubMod
+​
+METHOD:: speed2
+​
+METHOD:: harmLevel
+​
+METHOD:: setDefaults
+​
+METHOD:: ampAdd
+​
+METHOD:: startModFreq
+​
+METHOD:: transferOneAmt
+​
+METHOD:: transferOneNormAmt
+​
+METHOD:: shrinkAmt
+​
+METHOD:: subLevel
+​
+METHOD:: switchSet
+​
+METHOD:: shouldTransferOne
+​
+METHOD:: normalizeAmount
+​
+METHOD:: shouldShuffle
+​
+METHOD:: init
+argument:: subBufNum
+argument:: files
+argument:: out
+argument:: mainOut
+argument:: server
+​
+METHOD:: lastAmpAdd
+​
+METHOD:: transferTwoNormAmt
+​
+METHOD:: plusAmount
+​
+METHOD:: speedMod
+​
+METHOD:: shouldInterleaveOne
+​
+METHOD:: harmonizeAmt
+​
+METHOD:: go
+argument:: length
+​
+METHOD:: subAmt
+​
+​
+EXAMPLES::
+​
+code::
+//I recommend copy and pasting all of this into its' own file and working from there.
+//drop your own files, but these are standard for SC
+~files = (
+	\currSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\leaveOneSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\leaveTwoSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\transferSetOne : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\transferSetTwo : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+);
+~waveSetPlayer = WavesetTransformer(20, ~files);
+
+
+~waveSetPlayer.newWaves(~waveSetPlayer.waves.waves.sqr);
+
+//start playing the wavesets from your current waveset signal back
+Synth(\eq,addAction:\addToTail);
+~waveSetPlayer.go(100).play;
+//I added in a basic limiter for convenience, everything is routed through it, you can change how it works in the other file or you can change the out of the waveset SynthDefs and then do whatever you want.
+~waveSetPlayer.out = 5;
+
+
+
+// The following all take functions to allow for complex randomization
+// waveSetAmount;
+// multiplier;
+// repeats;
+// baseSpeed;
+// speedSwapAmt;
+
+
+//bigger numbers louder for each
+~waveSetPlayer.setAmpAmt(1);
+//this makes things louder more quicly
+~waveSetPlayer.setAmpAdd(2);
+
+//back to normal
+~waveSetPlayer.setAmpAmt(1);
+~waveSetPlayer.setAmpAdd(0);
+
+//if you want to change the current waveset you're using
+~temp = ~waveSetPlayer.currSet;
+//this won't do much until you put in your own file.
+~alternateSet = Wavesets.from(String.scDir +/+ "sounds/a11wlk01-44_1.aiff");
+~waveSetPlayer.switchToSet = ~alternateSet;
+~waveSetPlayer.switchSet = true;
+//switches it back to the original waveset
+~waveSetPlayer.switchToSet = ~temp;
+~waveSetPlayer.switchSet = false;
+
+//change the instrument being used to play the individual wavesets, this will modulate the starting point as each waveset is being played
+~waveSetPlayer.modulateStart();
+//frequency of modulation
+~waveSetPlayer.startModFreq = 1;
+//the range of modulation, 1 is modulation from current starting point to current start + current start to current start - current start. 0.5 is is modulation from current start to currentStart + current start * 0.5 to currentStart - current start * 0.5 etc...
+~waveSetPlayer.startAmt = 0.5;
+
+//change the instrument being used to play the individual wavesets, this will modulate the speed of the waveset as each is being played
+~waveSetPlayer.modulateSpeed();
+~waveSetPlayer.speed2 = 2.5;
+
+//both speed and start modulation
+~waveSetPlayer.moduleSpeedPlusStart();
+
+//back to regular instrument
+~waveSetPlayer.resetInst();
+
+//waveset "time stretching" play each waveset repeats amount of time, in this case play each waveset 3 times
+~waveSetPlayer.repeats = {3};
+//back to normal
+~waveSetPlayer.repeats = {1};
+
+//change the playback speed of each waveset. above 1 is faster below 1 is slower;
+~waveSetPlayer.baseSpeed  = {0.7};
+//back to normal
+~waveSetPlayer.baseSpeed  = {1};
+
+//put a small amount of distnace between each waveset, or a lot if you want...
+//0.05 will make a lot of noise, 0.001 will make a little, numbers between 0.0001 - 0.5 are recommended
+~waveSetPlayer.distance = 0.008;
+//back to normal
+~waveSetPlayer.distance = 0;
+
+//weird bit of my own thing, every speedChangeModuloth waveset, in this case every 8th waveset
+//change the speed to speed + ((i%self.speedMod()) * self.plusAmount());
+//example this would be every 8th waveset make speed be (say it is waveset number 64) 64%20*0.01 which equals 0.04
+~waveSetPlayer.speedChangeModulo = 3;
+~waveSetPlayer.speedMod = 10;
+~waveSetPlayer.plusAmount = 0.03;
+
+//back to normal
+~waveSetPlayer.speedChangeModulo = ~waveSetPlayer.currSet.xings.size*2;
+~waveSetPlayer.speedMod = 0;
+
+//change the amount of wavesets played for every waveset, so play 5 wavesets in the space of 1 waveset.
+~waveSetPlayer.waveSetAmount = {30};
+~waveSetPlayer.waveSetAmount = {1};
+
+//waveset "transposition". Play N copies of a waveset in the space of M wavesets. This will alter the length that the waveset is played by the multiple, for example take twice the length to play one waveset for 2 or take half the time to play the waveset if multiplier is 0.5.
+~waveSetPlayer.multiplier = {3};
+~waveSetPlayer.multiplier = {1};
+
+
+//waveset "averaging", play every averageModuloth waveset for the average length and at the average amplitude for the entire signal that the wavesets were generated from. This example plays every single waveset for the average length and at the average amplitude
+~waveSetPlayer.shouldAverage = true;
+~waveSetPlayer.averageModulo = 0;
+//back to normal
+~waveSetPlayer.shouldAverage = false;
+
+//waveset "shaking", changes the length of every other waveset, by dividing (rather than multiplying) by the current multiplier, for instance if multiplier is 3 divide every even waveset by 3 and multiply every odd waveset by 3
+~waveSetPlayer.shouldSwap = true;
+~waveSetPlayer.multiplier = {1.25};
+//back to normalorm
+~waveSetPlayer.shouldSwap = false;
+~waveSetPlayer.multiplier = 1;
+
+
+//waveset "shuffling", play a waveset that is random distance from 0 to shuffAmount from the current waveset, for instance if you are at waveset number 200, this will play a random waveset from 170 to 200, this causes distortions, higher numbers is more distortions.... don't go too high, maybe a quarter of the number of wavesets at max
+~waveSetPlayer.shouldShuffle = true;
+~waveSetPlayer.shuffAmount = 10;
+//compared to
+~waveSetPlayer.shuffAmount = 60;
+//back to normal
+~waveSetPlayer.shouldShuffle = false;
+
+//waveset "omission" set up with "burst" masking play deleteNormLevel wavesets then delete deleteLevel wavesets
+~waveSetPlayer.shouldDelete = true;
+~waveSetPlayer.deleteLevel = 5;
+~waveSetPlayer.deleteNormLevel = 4;
+~waveSetPlayer.shouldDelete = false;
+
+//pause the length of the removed waveset
+~waveSetPlayer.shouldDeletePause = true;
+//don't pause the length of the removed waveset;
+~waveSetPlayer.shouldDeletePause = false;
+
+// stochastic deletion of wavesets
+~waveSetPlayer.shouldRandomDelete = true;
+//the higher this number is the less likely wavesets are to be deleted
+~waveSetPlayer.deleteReceiver = 5;
+//the higher this number is also the less likely wavesets are to be deleted, each has it's own flavor
+~waveSetPlayer.deleteDeviation = 1;
+~waveSetPlayer.shouldRandomDelete = false;
+
+//waveset "substitution”, substitute a waveform in the place of the current waveset. In this current example it will substitute for 200 wavesets then it will not substitute for 20 wavesets. mess with the ratios, any amount can be cool, 0 for subNormLevel will substitute every single waveset
+~waveSetPlayer.shouldSub = true;
+~waveSetPlayer.subLevel = 200;
+~waveSetPlayer.subNormLevel = 20;
+//getting small
+~waveSetPlayer.subLevel = 1;
+~waveSetPlayer.subNormLevel = 1;
+//all replaced
+~waveSetPlayer.subNormLevel = 0;
+//back to normal
+~waveSetPlayer.shouldSub = false;
+
+//at anytime you can override the buffer that is being used and just use the buffer for the current signal of wavesets you are looping through. This is useful sometimes when you are substituting or transfering it will make weird things happen
+~waveSetPlayer.useCurrBuf = true;
+//back to normal
+~waveSetPlayer.useCurrBuf = false;
+
+//if you are substituting this will send a random waveform to the buffer that is being used for substituting every waveSubModth, this changes the waveform every 20 wavesets
+~waveSetPlayer.shouldSub = true;
+~waveSetPlayer.subLevel = 20;
+~waveSetPlayer.subNormLevel = 0;
+~waveSetPlayer.waveSubMod = 30;
+//back to normal
+~waveSetPlayer.waveSubMod = ~waveSetPlayer.currSet.xings.size*2;
+~waveSetPlayer.shouldSub = false;
+
+//waveset "reversal" reverses reverseLevel amount of wavesets and then doesn't for reverseNormLevel amount of wavesets. This examples will reverse 500 wavesets then not reverse 100.
+~waveSetPlayer.shouldReverse = true;
+~waveSetPlayer.reverseLevel = 500;
+~waveSetPlayer.reverseNormLevel = 100;
+//back to normal
+~waveSetPlayer.shouldReverse = false;
+
+//pan the wavesets to whatever pan is, in this example full right
+~waveSetPlayer.pan = 1;
+//this will start panning wavesets from pan*-1 to pan for every panLevel waveset.
+~waveSetPlayer.shouldPan = true;
+//this will play 3 wavesets at -1 and then 3 wavesets at 1
+~waveSetPlayer.panLevel = 60;
+~waveSetPlayer.panNormLevel = 60;
+//this will play 400 wavesets at -1 and then 700 wavesets at 1
+~waveSetPlayer.panLevel = 400;
+~waveSetPlayer.panNormLevel = 400;
+//back to normal
+~waveSetPlayer.pan = 0;
+~waveSetPlayer.shouldPan = false;
+
+//this will decrement the amplitude of every waveset until the nth waveset's amplitude is zero and then pause for breakAmount seconds before starting up again at ampAmt level. This example will play 90 wavesets fading out to silence then pause for 0.1 seconds.
+~waveSetPlayer.decBreak = true;
+~waveSetPlayer.breakPointSet = 200;
+~waveSetPlayer.breakAmount = {rrand(0.001,0.5)};
+//back to normal
+~waveSetPlayer.decBreak = false;
+
+//waveset "harmonic distortion". suerperimposes n harmonix on the waveset fundamental with a scaling fact m relative to the previous harmonic. The amplitude of each harmonic can be changed with harmLevel. 3 "harmonics" (copy of the waveset with faster playback speeds) are created, the amplitude of each is the original wavesets amplitude divided by the harmonic number, (numbers 2 through 4, i.e. 2,3,4) multiplied by the harmLevel. In this example the second harmonic's amplitude will be the amplitude of the current waveset divided by 3*0.1, etc... lower harmLevels means more pronounced (louder) harmonics and so on, larger means less pronounced.
+//say the amp of the current waveset is 0.8, the amplitude of the first harmonic would be 0.8/(2*0.1).
+//never go above one for harmLevel
+//like sub and pan before, it will harmonize harmonizeLevel wavesets and then not harmonize harmonizeNormLevel amount of wavesets, in this case harmonize 50 wavesets then don't 20 wavesets
+~waveSetPlayer.shouldHarmonize = true;
+~waveSetPlayer.harmLevel = 0.45;
+~waveSetPlayer.harmonizeLevel = 2;
+~waveSetPlayer.harmonizeNormLevel = 2;
+//low level
+~waveSetPlayer.harmonizeLevel = 20;
+~waveSetPlayer.harmonizeNormLevel = 20;
+//back to normal
+~waveSetPlayer.shouldHarmonize = false;
+
+//won't work unless you replace transferSetOne with something 
+//waveset "transfer" method one. This will play a waveset from transferSet, length amp, sustain, using the currSet buffer (signal). Like the other level based transformations before it it will transfer for 9 wavesets and then not transfer for 11, set transferOneNormLevel to 0 for transfering every waveset
+~waveSetPlayer.shouldTransferOne = true;
+~waveSetPlayer.transferOneLevel = 9;
+~waveSetPlayer.transferOneNormLevel = 3;
+//back to normal
+~waveSetPlayer.shouldTransferOne = false;
+
+//won't work unless you replace shouldTransferTwo with something 
+//waveset "transfer" method two. Same as above but it uses the length and sustain of the currSet signal and the length and sustain of the transferSet.
+~waveSetPlayer.shouldTransferTwo = true;
+~waveSetPlayer.transferTwoLevel = 30;
+~waveSetPlayer.transferTwoNormLevel = 30;
+//back to normal
+~waveSetPlayer.shouldTransferTwo = false;
+
+//won't work unless you replace leaveOneSet with something 
+//waveset "interleaving" method one. Plays interleaveOneLevel amount of wavesets from leaveOneSet then interleaveOneNormLevel from the currSet, low numbers make a kind of waveset zipper effect and the sound gets confusing. Larger number creates a kind of fast crossfade thing, like one of the scratching dj assholes. The ratio of interleaveOneLevel to interleaveOneNormLevel  should be close to one for best effects, but maybe you like it less close
+~waveSetPlayer.shouldInterleaveOne = true;
+~waveSetPlayer.interleaveOneLevel = 20;
+~waveSetPlayer.interleaveOneNormLevel = 20;
+//back to normal
+~waveSetPlayer.shouldInterleaveOne = false;
+
+//won't work unless you replace leaveTwoSet with something 
+//waveset "interleaving" method two. Same as above but plays the corresponding waveset from interleaveTwoSet rather than just going forward. For instance it will play the tenth waveset from interleaveSetTwo and then the tenth waveset from interleaveSetOne, the above will play the tenth waveset from the currSet then the eleventh from interleavesettwo. The ratio should also be close to one the zipper effect is more felt here and low numbers create psychocoustic effect of a totally blended signal.
+~waveSetPlayer.shouldInterleaveTwo = true;
+~waveSetPlayer.interleaveTwoLevel = 2;
+~waveSetPlayer.interleaveTwoNormLevel = 2;
+//back to normal
+~waveSetPlayer.shouldInterleaveTwo = false;
+
+//waveset "normalizing" normalize every waveset who's amplitude is above the average amplitude of the current waveset set times the normalizeThresh, so if the average is 0.8 every waveset that has an amplitude greater than 0.8*0.1, will be "normalized". Normalized means the wavesets amplitude is set to the average of the set. It will only check for every normalizeAmounth waveset, for example, this one only checks if it should normalize every second waveset.
+~waveSetPlayer.shouldNormalize = true;
+~waveSetPlayer.normalizeAmount = 3;
+~waveSetPlayer.normalizeThresh = 0.1;
+//back to normal
+~waveSetPlayer.shouldNormalize = false;
+
+//every speedSwapModuloth waveset, in this case every 3rd, gets it's speed multiplied by speedSwapAmt
+~waveSetPlayer.speedSwapModulo = 5;
+//higher numbers is faster. lower slower
+~waveSetPlayer.speedSwapAmt = 0.5;
+//back to normal
+~waveSetPlayer.speedSwapModulo = ~waveSetPlayer.currSet.xings.size*2;
+
+//waveset "shrinking" don't play every waveset who's amplitude is below the average amplitude times the shrinkAmt. In this example it will not play every waveset who's amplitude is less than 0.5 times the average
+~waveSetPlayer.shouldShrink = true;
+//higher numbers more shrinking
+~waveSetPlayer.shrinkAmt = 0.8;
+//back to normal
+~waveSetPlayer.shouldShrink = false;
+::
+​

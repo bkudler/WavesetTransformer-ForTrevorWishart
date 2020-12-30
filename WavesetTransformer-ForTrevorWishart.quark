@@ -1,0 +1,7 @@
+(
+	name:		"WavesetTransformer-ForTrevorWishart",
+	path:		"WavesetTransformer-ForTrevorWishart",
+    dependencies: ["Wavesets"],
+	summary:	"all the waveset transformers described by Trevor Wishart",
+	author:	    "Ben Kudler"
+)

@@ -7,7 +7,7 @@ DESCRIPTION::
 This creates an interface in SuperCollider for working with all of the waveset transformations described by Trevor Wishart, as recounted by Curtis Road in Microsound, plus a few weird ones I found along the way. This class builds off of Alberto De Campo's brilliant Wavesets class and allows for an easier interface for Waveset transformation. The quark this class is found in comes with a wrapper for this class that allows for even easier waveset transformation, the WavesetTransformerPlayer. Scroll down to examples for an explanation of each transformation and how it is done with this class.
 
 
-​First code examples: 
+​First code examples:
 ​
 code::
 //you'll need a bunch of files to convert to wavesets and preform various transformations
@@ -287,10 +287,36 @@ code::
 ~waveSetPlayer.newWaves(~waveSetPlayer.waves.waves.sqr);
 
 //start playing the wavesets from your current waveset signal back
-Synth(\eq,addAction:\addToTail);
+~waveSetPlayerLimiter = Synth(\eq,addAction:\addToTail);
 ~waveSetPlayer.go(100).play;
 //I added in a basic limiter for convenience, everything is routed through it, you can change how it works in the other file or you can change the out of the waveset SynthDefs and then do whatever you want.
+~waveSetPlayer.out = 10;
+~waveSetPlayerLimiter.set(\in, 10);
+//delay listening on bus 20
+SynthDef(\wsDelay,{
+	var out = CombC.ar(
+		In.ar(
+			20,
+			2
+		),
+		0.2,
+		0.5,
+		10
+	);
+	Out.ar(0,Pan2.ar(out, level:0.5));
+}).add;
+//play an instance of it at the tail
+Synth(\delayTest, addAction:\addToTail);
+//route the limiter through it
+~waveSetPlayerLimiter.set(\out, 20);
+//back to normal
+~waveSetPlayerLimiter.set(\out, 0);
+//route the player through it, i.e. get rid of the limiter;
+~waveSetPlayer.out = 20;
+//back to normsies
+~waveSetPlayerLimiter.set(\in, 5);
 ~waveSetPlayer.out = 5;
+
 
 
 
@@ -483,7 +509,7 @@ Synth(\eq,addAction:\addToTail);
 //back to normal
 ~waveSetPlayer.shouldHarmonize = false;
 
-//won't work unless you replace transferSetOne with something 
+//won't work unless you replace transferSetOne with something
 //waveset "transfer" method one. This will play a waveset from transferSet, length amp, sustain, using the currSet buffer (signal). Like the other level based transformations before it it will transfer for 9 wavesets and then not transfer for 11, set transferOneNormLevel to 0 for transfering every waveset
 ~waveSetPlayer.shouldTransferOne = true;
 ~waveSetPlayer.transferOneLevel = 9;
@@ -491,7 +517,7 @@ Synth(\eq,addAction:\addToTail);
 //back to normal
 ~waveSetPlayer.shouldTransferOne = false;
 
-//won't work unless you replace shouldTransferTwo with something 
+//won't work unless you replace shouldTransferTwo with something
 //waveset "transfer" method two. Same as above but it uses the length and sustain of the currSet signal and the length and sustain of the transferSet.
 ~waveSetPlayer.shouldTransferTwo = true;
 ~waveSetPlayer.transferTwoLevel = 30;
@@ -499,7 +525,7 @@ Synth(\eq,addAction:\addToTail);
 //back to normal
 ~waveSetPlayer.shouldTransferTwo = false;
 
-//won't work unless you replace leaveOneSet with something 
+//won't work unless you replace leaveOneSet with something
 //waveset "interleaving" method one. Plays interleaveOneLevel amount of wavesets from leaveOneSet then interleaveOneNormLevel from the currSet, low numbers make a kind of waveset zipper effect and the sound gets confusing. Larger number creates a kind of fast crossfade thing, like one of the scratching dj assholes. The ratio of interleaveOneLevel to interleaveOneNormLevel  should be close to one for best effects, but maybe you like it less close
 ~waveSetPlayer.shouldInterleaveOne = true;
 ~waveSetPlayer.interleaveOneLevel = 20;
@@ -507,7 +533,7 @@ Synth(\eq,addAction:\addToTail);
 //back to normal
 ~waveSetPlayer.shouldInterleaveOne = false;
 
-//won't work unless you replace leaveTwoSet with something 
+//won't work unless you replace leaveTwoSet with something
 //waveset "interleaving" method two. Same as above but plays the corresponding waveset from interleaveTwoSet rather than just going forward. For instance it will play the tenth waveset from interleaveSetTwo and then the tenth waveset from interleaveSetOne, the above will play the tenth waveset from the currSet then the eleventh from interleavesettwo. The ratio should also be close to one the zipper effect is more felt here and low numbers create psychocoustic effect of a totally blended signal.
 ~waveSetPlayer.shouldInterleaveTwo = true;
 ~waveSetPlayer.interleaveTwoLevel = 2;

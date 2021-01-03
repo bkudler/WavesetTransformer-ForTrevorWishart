@@ -5,7 +5,7 @@ related:: Classes/Wavesets, Classes/WavesetTransformer
 
 DESCRIPTION::
 
-Some of the things happening in WavesetTransformer require verbose code, such as 
+Some of the things happening in WavesetTransformer require verbose code, such as
 ```
 ~waveSetPlayer.shouldInterleaveOne = true;
 ~waveSetPlayer.interleaveOneLevel = 20;
@@ -15,7 +15,7 @@ Some of the things happening in WavesetTransformer require verbose code, such as
 this class provides wrappers for that verbose code plus a smattering of presets to work with. This class is a living code base. If you find a great preset add it in to the class as a method. Scroll down to examples, copy and paste all of it into a new file for an explanation of each method and some fun.
 
 
-First code examples: 
+First code examples:
 
 code::
 ~files = (
@@ -304,8 +304,6 @@ code::
 	\transferSetTwo : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
 );
 ~moves = WavesetTransformerPlayer(20,~files);
-Synth(\eq,addAction:\addToTail);
-~moves.go(900).play;
 
 (
 //send a random wave from the waves you injected into waveSetPlayer to the subBuf so you have waveforms to substitute in later... just trust me.
@@ -314,15 +312,46 @@ Synth(\eq,addAction:\addToTail);
 ~moves.plotSub()
 )
 
-
+//get all of the waveforms that come with the transformer
+~moves.waveset.waves.showKeys
+//pick one
 ~moves.changeSubWave('sqr');
+//only show a few waves
+~moves.waveset.waves.showKeys(3);
 
 //start playing the wavesets from your current waveset signal back
-Synth(\eq,addAction:\addToTail);
+~waveSetPlayerLimiter = Synth(\eq,addAction:\addToTail);
 ~moves.go(100).play;
 //I added in a basic limiter for convenience, everything is routed through it, you can change how it works in the other file or you can change the out of the waveset SynthDefs and then do whatever you want.
-~waveSetPlayer.out = 5;
-//this won't do much unless you replace with a better file.
+~moves.waveset.out = 10;
+~waveSetPlayerLimiter.set(\in, 10);
+//delay listening on bus 20
+SynthDef(\wsDelay,{
+	var out = CombC.ar(
+		In.ar(
+			20,
+			2
+		),
+		0.2,
+		0.5,
+		10
+	);
+	Out.ar(0,Pan2.ar(out, level:0.5));
+}).add;
+//play an instance of it at the tail
+Synth(\delayTest, addAction:\addToTail);
+//route the limiter through it
+~waveSetPlayerLimiter.set(\out, 20);
+//back to normal
+~waveSetPlayerLimiter.set(\out, 0);
+//route the player through it, i.e. get rid of the limiter;
+~moves.waveset.out = 20;
+//back to normsies
+~waveSetPlayerLimiter.set(\in, 5);
+~moves.waveset.out = 5;
+
+
+
 ~moves.changeCurrSet(Wavesets.from(String.scDir +/+ "sounds/a11wlk01-44_1.aiff"));
 ~moves.waveset.switchSet = false;
 ~moves.returnCurrSet();
@@ -509,19 +538,19 @@ Synth(\eq,addAction:\addToTail);
 ~moves.harmonizeSets(0.2,3,0);
 ~moves.harmonizeSets(0.2,3,2);
 
-//won't work unless you replace transferSetOne with something 
+//won't work unless you replace transferSetOne with something
 ~moves.transferSetsOne(3,3);
 ~moves.transferSetsOne(3,0);
 
-//won't work unless you replace shouldTransferTwo with something 
+//won't work unless you replace shouldTransferTwo with something
 ~moves.transferSetsTwo(3,3);
 ~moves.transferSetsTwo(3,0);
 
-//won't work unless you replace leaveOneSet with something 
+//won't work unless you replace leaveOneSet with something
 ~moves.interleaveSetsOne(3,3);
 ~moves.interleaveSetsOne(1,1);
 
-//won't work unless you replace leaveTwoSet with something 
+//won't work unless you replace leaveTwoSet with something
 ~moves.interleaveSetsTwo(3,3);
 ~moves.interleaveSetsTwo(3,1);
 ~moves.interleaveSetsTwo(1,1);

@@ -17,17 +17,17 @@ WavesetTransformer {
         ^super.new.init(subBufNum, files);
     }
 
-    init { | subBufNum, files, out = 5, mainOut = 0, server |
+    init { | subBufNum, files, wsOut = 5, mainOut = 0, server |
 		var buf = Buffer.alloc(server, 512,bufnum:subBufNum);
 
-		this.out = out;
+		this.out = wsOut;
 		this.mainOut = mainOut;
 
-		SynthDef(\eq, {
+		SynthDef(\eq, {arg in = 5, out = 0;
 
-			var limiter = Limiter.ar(In.ar(out, 2), 0.85);
+			var limiter = Limiter.ar(In.ar(in, 2), 0.85);
 
-			Out.ar(mainOut, limiter);
+			Out.ar(out, limiter);
 		}).add;
 
 		Wavesets.prepareSynthDefs;
@@ -61,14 +61,10 @@ WavesetTransformer {
 		this.switchToSet = Wavesets.from(files.currSet);
 		this.setDefaults();
 
-
 		^this;
     }
 
 	setDefaults{
-
-		this.mainOut = 0;
-		this.out = 5;
 
 		this.startModFreq = 0.5;
 		this.startAmt = 0.2;

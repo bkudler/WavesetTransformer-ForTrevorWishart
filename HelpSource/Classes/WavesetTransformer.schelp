@@ -306,7 +306,7 @@ SynthDef(\wsDelay,{
 	Out.ar(0,Pan2.ar(out, level:0.5));
 }).add;
 //play an instance of it at the tail
-Synth(\delayTest, addAction:\addToTail);
+Synth(\wsDelay, addAction:\addToTail);
 //route the limiter through it
 ~waveSetPlayerLimiter.set(\out, 20);
 //back to normal

@@ -35,7 +35,8 @@ CLASSMETHODS::
 METHOD:: new
 argument:: subBufNum
 argument:: files
-
+argument:: wsOut
+argument:: mainOut
 
 INSTANCEMETHODS::
 
@@ -398,6 +399,18 @@ Synth(\wsDelay, addAction:\addToTail);
 ~moves.waveset.multiplier = {3};
 ~moves.waveset.multiplier = {1};
 
+// play the regular speed for 400 wavesets then multiply the speed by 1.35 for 200 wavesets
+~moves.longSwap(200,400,1.35);
+~moves.waveset.shouldLongSwap = false;
+
+// multiply the length of the waveset by the regular speed for 400 wavesets then multiply the the length of the waveset  by the regular speed 2 for 200 wavesets
+~moves.multiLongSwap(200,400,2);
+~moves.waveset.shouldMultiLongSwap = false;
+
+// repeat each waveset the regular amount of times for 400 wavesets then repeat each waveset the regular amount of times plus three for 400 wavesets
+~moves.repeatLongSwap(200,400,3);
+~moves.waveset.shouldRepeatSwap = false;
+
 
 ~moves.waveset.shouldAverage = true;
 ~moves.waveset.averageModulo = 5;
@@ -576,6 +589,11 @@ Synth(\wsDelay, addAction:\addToTail);
 ~moves.customPhrase(0.001, 0.8, 100, 900, 0.1);
 ~moves.contBreak = false;
 ~moves.customPhrase(0.005,1, 50,550, 4);
+
+//customize it;
+~moves.waveset.breakAmount = {rrand(0.01, 1)};
+~moves.breakBottom = 5;
+~moves.breakTop = 20;
 
 ~moves.waveset.decBreak = false;
 ~moves.ensound(1,5);

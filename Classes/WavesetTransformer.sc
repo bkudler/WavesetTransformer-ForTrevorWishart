@@ -3,18 +3,18 @@ WavesetTransformer {
 
 	var <>subBuf, <>mainOut = 0, <>out = 5, <>waves;
 
-	var <>startModFreq, <>startAmt, <>speed2, <>distance, <>speedChangeModulo, <>plusAmount, <>speedMod, <>speedSwapModulo;
+	var <>startModFreq, <>startAmt, <>speed2, <>distance, <>speedChangeModulo, <>plusAmount, <>speedMod, <>speedSwapModulo, <>longSwapAmt, <>longSwapNormLevel, <>longSwapNormAmt, <>longSwapLevel, <>longSwapAmt, <>longSwapLevel, <>longSwapNormAmt, <>longSwapNormLevel, <>multiLongSwapAmt, <>multiLongSwapLevel, <>multiLongSwapNormAmt, <>multiLongSwapNormLevel, <>repeatSwapAmt, <>repeatSwapLevel, <>repeatSwapNormAmt,  <>repeatSwapNormLevel;
 
 	var <>waveSetAmount, <>multiplier, <>repeats, <>baseSpeed, <>shouldSwap, <>pan, <>inst;
 
-	var <>shouldDelete, <>shouldRandomDelete, <>deletePauseSet, <>shouldDeletePause, <>shouldAverage, <>shouldShuffle, <>shouldSub, <>shouldReverse, <>shouldPan, <>shouldHarmonize, <>shouldTransferOne, <>shouldTransferTwo, <>shouldInterleaveTwo, <>shouldInterleaveOne, <>shouldNormalize, <>shouldShrink, <>useCurrBuf;
+	var <>shouldDelete, <>shouldRandomDelete, <>deletePauseSet, <>shouldDeletePause, <>shouldAverage, <>shouldShuffle, <>shouldSub, <>shouldReverse, <>shouldPan, <>shouldHarmonize, <>shouldTransferOne, <>shouldTransferTwo, <>shouldInterleaveTwo, <>shouldInterleaveOne, <>shouldNormalize, <>shouldShrink, <>shouldLongSwap, <>useCurrBuf, <>shouldMultiLongSwap, <>shouldRepeatSwap;
 
-	var <>deleteLevel, <>deleteAmt, <>deleteNormAmt, <>deleteNormLevel,<>deleteReceiver, <>deleteDeviation, <>averageModulo, <>shuffAmount, <>subAmt, <>subLevel, <>subNormAmt, <>subNormLevel, <>reverseAmt, <>reverseLevel, <>reverseNormAmt, <>reverseNormLevel, <>panAmt, <>panLevel, <>panNormAmt, <>panNormLevel, <>waveSubMod, <>lastAmpAmt, <>lastAmpAdd, <>ampAmt, <>ampAdd, <>harmLevel, <>harmonizeAmt, <>harmonizeLevel, <>harmonizeNormAmt, <>harmonizeNormLevel, <>transferOneAmt, <>transferOneLevel, <>transferOneNormAmt, <>transferOneNormLevel, <>transferTwoAmt, <>transferTwoLevel, <>transferTwoNormAmt, <>transferTwoNormLevel, <>interleaveTwoAmt, <>interleaveOneAmt, <>interleaveOneLevel, <>interleaveOneNormAmt, <>interleaveOneNormLevel, <>interleaveTwoLevel, <>interleaveTwoNormAmt, <>interleaveTwoNormLevel, <>normalizeAmount, <>normalizeThresh, <>speedSwapAmt, <>shrinkAmt;
+	var <>deleteLevel, <>deleteAmt, <>deleteNormAmt, <>deleteNormLevel,<>deleteReceiver, <>deleteDeviation, <>averageModulo, <>shuffAmount, <>subAmt, <>subLevel, <>subNormAmt, <>subNormLevel, <>reverseAmt, <>reverseLevel, <>reverseNormAmt, <>reverseNormLevel, <>panAmt, <>panLevel, <>panNormAmt, <>panNormLevel, <>waveSubMod, <>lastAmpAmt, <>lastAmpAdd, <>ampAmt, <>ampAdd, <>harmLevel, <>harmonizeAmt, <>harmonizeLevel, <>harmonizeNormAmt, <>harmonizeNormLevel, <>transferOneAmt, <>transferOneLevel, <>transferOneNormAmt, <>transferOneNormLevel, <>transferTwoAmt, <>transferTwoLevel, <>transferTwoNormAmt, <>transferTwoNormLevel, <>interleaveTwoAmt, <>interleaveOneAmt, <>interleaveOneLevel, <>interleaveOneNormAmt, <>interleaveOneNormLevel, <>interleaveTwoLevel, <>interleaveTwoNormAmt, <>interleaveTwoNormLevel, <>normalizeAmount, <>normalizeThresh, <>speedSwapAmt, <>shrinkAmt, <>multiSwapAmt, <>repeatSwapLev;
 
 	var <>breakPointSet, <>breakPoint, <>decBreak, <>breakBottom, <>breakTop, <>breakAmount;
 
-	*new {| subBufNum, files  |
-        ^super.new.init(subBufNum, files);
+	*new {| subBufNum, files, wsOut, mainOut |
+        ^super.new.init(subBufNum, files, wsOut, mainOut);
     }
 
     init { | subBufNum, files, wsOut = 5, mainOut = 0, server |
@@ -69,11 +69,23 @@ WavesetTransformer {
 		this.startModFreq = 0.5;
 		this.startAmt = 0.2;
 		this.speed2 = 1.1;
-		this.distance = 0;
+		this.distance = {0};
 		this.speedChangeModulo = this.currSet.xings.size*2;
-		this.plusAmount = 0.0;
-		this.speedMod = 0;
+		this.plusAmount = {0.0};
+		this.speedMod = {0};
 		this.speedSwapModulo = this.currSet.xings.size*2;
+		this.longSwapAmt = 1;
+		this.longSwapLevel = 1;
+		this.longSwapNormAmt = 0;
+		this.longSwapNormLevel = 0;
+		this.multiLongSwapAmt = 1;
+		this.multiLongSwapLevel = 1;
+		this.multiLongSwapNormAmt = 0;
+		this.multiLongSwapNormLevel = 0;
+		this.repeatSwapAmt = 1;
+		this.repeatSwapLevel = 1;
+		this.repeatSwapNormAmt = 0;
+		this.repeatSwapNormLevel = 0;
 
 		this.waveSetAmount = {1};
 		this.multiplier = {1};
@@ -99,6 +111,9 @@ WavesetTransformer {
 		this.shouldNormalize = false;
 		this.shouldShrink = false;
 		this.useCurrBuf = false;
+		this.shouldLongSwap = false;
+		this.shouldMultiLongSwap = false;
+		this.shouldRepeatSwap = false;
 
 		this.deleteLevel = 1;
 		this.deleteAmt = 1;
@@ -107,7 +122,7 @@ WavesetTransformer {
 		this.deleteReceiver = 1;
 		this.deleteDeviation = 2;
 		this.averageModulo = this.currSet.xings.size*2;
-		this.shuffAmount = 0;
+		this.shuffAmount = {0};
 		this.subAmt = 1;
 		this.subLevel = 1;
 		this.subNormAmt = 0;
@@ -120,12 +135,12 @@ WavesetTransformer {
 		this.panLevel = 1;
 		this.panNormAmt = 0;
 		this.panNormLevel = 0;
-		this.waveSubMod = this.currSet.xings.size*2;
+		this.waveSubMod = {this.currSet.xings.size*2};
 		this.lastAmpAmt = 1;
 		this.lastAmpAdd = 0;
 		this.ampAmt = 1;
 		this.ampAdd = 0;
-		this.harmLevel = 0.1;
+		this.harmLevel = {0.1};
 		this.harmonizeAmt = 1;
 		this.harmonizeLevel = 1;
 		this.harmonizeNormAmt = 0;
@@ -149,10 +164,12 @@ WavesetTransformer {
 		this.normalizeAmount = this.currSet.xings.size*2;
 		this.normalizeThresh = 10;
 		this.speedSwapAmt = {1};
+		this.multiSwapAmt = {1};
+		this.repeatSwapLev = {0};
 		this.shrinkAmt = 1.75;
 
 		this.breakPointSet = 1;
-		this.breakPoint = 1;
+		this.breakPoint = 50;
 		this.decBreak = false;
 		this.breakAmount = {0};
 	}
@@ -388,7 +405,7 @@ WavesetTransformer {
 				amount = this.currSet.xings.size -  (this.waveSetAmount.value());
 				amount.do({arg i;
 					var ev, speed, start, length, startFrame, endFrame, amp,harmEvents,
-					numWs, sustain, repeats, sum, origRate, wsDur, frame, type, plunk;
+					numWs, sustain, repeats, sum, origRate, wsDur, multiplier;
 
 					if( this.shouldInterleaveTwo && (this.interleaveTwoNormAmt > 0)){
 						i = i - this.interleaveTwoAmt;
@@ -396,14 +413,14 @@ WavesetTransformer {
 
 					if(this.shouldShuffle, {
 						var origI = i;
-						i = i + this.shuffAmount.rand2;
+						i = i + this.shuffAmount.value().rand2;
 						if( (i < 0) or: (i >= amount)){
 							if( i < 0 ){
-								i = origI + this.shuffAmount;
+								i = origI + this.shuffAmount.value();
 							};
 
 							if( i >= amount ){
-								i = origI - this.shuffAmount;
+								i = origI - this.shuffAmount.value();
 							};
 						};
 
@@ -415,17 +432,63 @@ WavesetTransformer {
 					speed = this.baseSpeed.value();
 
 
+
 					if( (i%this.speedChangeModulo) === 0, {
-					 	speed = speed + ((i%this.speedMod) * this.plusAmount);
+						speed = speed + ((i%this.speedMod.value()) * this.plusAmount.value());
 					 },{
-					 	speed = speed - ((i%this.speedMod) * this.plusAmount);
+						speed = speed - ((i%this.speedMod.value()) * this.plusAmount.value());
 					});
 
 					if( (i%this.speedSwapModulo) === 0){
 						speed = speed*this.speedSwapAmt();
 					};
 
+
+					if(this.shouldLongSwap){
+						if(this.longSwapAmt > 0){
+
+							speed = speed*this.speedSwapAmt();
+
+							this.longSwapAmt = this.longSwapAmt - 1;
+							if(this.longSwapAmt === 0){
+								this.longSwapNormAmt = this.longSwapNormLevel + 1;
+							};
+
+						};
+
+						if(this.longSwapNormAmt > 0){
+							this.longSwapNormAmt = this.longSwapNormAmt - 1;
+							if(this.longSwapNormAmt === 0){
+								this.longSwapAmt = this.longSwapLevel;
+							};
+						};
+
+					};
+
+
 					repeats = this.repeats.value();
+
+					if(this.shouldRepeatSwap){
+						if(this.repeatSwapAmt > 0){
+
+							repeats = repeats + this.repeatSwapLev;
+
+							this.repeatSwapAmt = this.repeatSwapAmt - 1;
+							if(this.repeatSwapAmt === 0){
+								this.repeatSwapNormAmt = this.repeatSwapNormLevel + 1;
+							};
+
+						};
+
+						if(this.repeatSwapNormAmt > 0){
+							this.repeatSwapNormAmt = this.repeatSwapNormAmt - 1;
+							if(this.repeatSwapNormAmt === 0){
+								this.repeatSwapAmt = this.repeatSwapLevel;
+							};
+						};
+
+					};
+
 					numWs = this.waveSetAmount.value();
 
 					//////WELCOME TO THE MAINNNN EVENTTTTTTT
@@ -562,11 +625,36 @@ WavesetTransformer {
 
 					};
 
+					multiplier = this.multiplier.value();
 
-					ev.length = ev.length*this.multiplier.value();
+					if(this.shouldMultiLongSwap){
+						if(this.multiLongSwapAmt > 0){
+
+							multiplier = multiplier * multiSwapAmt;
+
+							this.multiLongSwapAmt = this.multiLongSwapAmt - 1;
+
+							if(this.multiLongSwapAmt === 0){
+								this.multiLongSwapNormAmt = this.multiLongSwapNormLevel + 1;
+							};
+
+						};
+
+						if(this.multiLongSwapNormAmt > 0){
+							this.multiLongSwapNormAmt = this.multiLongSwapNormAmt - 1;
+							if(this.multiLongSwapNormAmt === 0){
+								this.multiLongSwapAmt = this.multiLongSwapLevel;
+							};
+						};
+
+					};
+
+
+
+					ev.length = ev.length*multiplier;
 
 					if( ( (i%2) == 0 && this.shouldSwap), {
-						ev.length = (endFrame - startFrame)/this.multiplier.value();
+						ev.length = (endFrame - startFrame)/multiplier;
 					});
 
 					sustain = ev.length / this.currSet.sampleRate;
@@ -602,7 +690,7 @@ WavesetTransformer {
 							};
 						};
 
-						if( ((i%this.waveSubMod) === 0 && (i > 1)), {
+						if( ((i%this.waveSubMod.value()) === 0 && (i > 1)), {
 							this.randomWave();
 						});
 
@@ -681,7 +769,7 @@ WavesetTransformer {
 							(2 to: 4).do({arg i;
 								temp = temp.copy;
 								temp.playRate = (temp.playRate * i);
-								temp.amp = temp.amp / (i*this.harmLevel);
+								temp.amp = temp.amp / (i*this.harmLevel.value());
 								harmEvents.add(temp);
 							});
 
@@ -740,16 +828,16 @@ WavesetTransformer {
 						});
 
 					if(i !== (this.currSet.xings.size - (this.waveSetAmount.value() + 1)), {
-							(ev.sustain + this.distance).wait;
+						  (ev.sustain + this.distance.value()).wait;
 						},{
-							this.distance.wait;
+						  this.distance.value().wait;
 						});
 					if((this.shouldDeletePause && this.deletePauseSet), {
 						this.deletePauseSet = false;
 						if(i !== (this.currSet.xings.size - (this.waveSetAmount.value() + 1)), {
-							(ev.sustain + this.distance).wait;
+							(ev.sustain + this.distance.value()).wait;
 						},{
-							this.distance.wait;
+							this.distance.value().wait;
 						});
 					});
 					if( ( this.decBreak and: (this.breakPoint != 0) and: (this.ampAmt > 0.1) ) ,{

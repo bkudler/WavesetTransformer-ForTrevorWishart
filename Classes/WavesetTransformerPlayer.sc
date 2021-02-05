@@ -7,12 +7,12 @@ WavesetTransformerPlayer {
 	var <>shouldScrambleSeries = false, <>shouldPlaySeries = false;
 	var <>contMultiplierRandomBreak = false, <>contMultiplierDirectBreak = false, <>contSpeedRandomBreak = false, <>contSpeedDirectBreak = false, <>shouldPlayMode = false, <>shouldSwitchMode = false;
 
-	*new {| subBufNum, files  |
-        ^super.new.init(subBufNum, files);
+	*new {| subBufNum, files, wsOut, mainOut  |
+        ^super.new.init(subBufNum, files, wsOut, mainOut);
     }
 
-	init {| subBufNum, files  |
-		this.waveset = WavesetTransformer(subBufNum, files);
+	init {| subBufNum, files, wsOut, mainOut  |
+		this.waveset = WavesetTransformer(subBufNum, files, wsOut, mainOut);
 		this.waveset.randomWave();
 		this.waveset.subBuf.plot();
 		this.snapShot = ();
@@ -20,7 +20,7 @@ WavesetTransformerPlayer {
     }
 
 	go{arg amt;
-		this.ensound(1,0.25);
+		this.ensound(1,1);
 		^this.waveset.go(amt)
 	}
 
@@ -73,6 +73,9 @@ WavesetTransformerPlayer {
 		this.waveset.speedSwapModulo = this.waveset.currSet.xings.size*2;
 		this.waveset.waveSubMod = this.waveset.currSet.xings.size*2;
 		this.waveset.shouldShrink = false;
+		this.waveset.shouldRepeatSwap = false;
+		this.waveset.shouldMultiLongSwap = false;
+		this.waveset.shouldLongSwap = false;
 	}
 
 	climb{
@@ -310,6 +313,7 @@ WavesetTransformerPlayer {
 		this.breakSwap(0.1);
 	}
 
+
 	moduloSpeedChange{arg modulo, modAmt, plusAmt;
 		this.waveset.speedChangeModulo = modulo;
 		this.waveset.speedMod = modAmt;
@@ -320,6 +324,28 @@ WavesetTransformerPlayer {
 		this.waveset.speedSwapModulo = modulo;
 		this.waveset.speedSwapAmt = amt;
 	}
+
+	longSwap{arg longSwapLevel, norm, speedAmt;
+		this.waveset.shouldLongSwap = true;
+		this.waveset.longSwapLevel = longSwapLevel;
+		this.waveset.longSwapNormLevel = norm;
+		this.waveset.speedSwapAmt = speedAmt;
+	}
+
+	multiLongSwap{arg multiLongSwapLevel, norm, multiAmt;
+		this.waveset.shouldMultiLongSwap = true;
+		this.waveset.multiLongSwapLevel = multiLongSwapLevel;
+		this.waveset.multiLongSwapNormLevel = norm;
+		this.waveset.multiSwapAmt = multiAmt;
+	}
+
+	repeatLongSwap{arg repeatLongSwapLevel, norm, repeatAdd;
+		this.waveset.shouldRepeatSwap = true;
+		this.waveset.repeatSwapLevel = repeatLongSwapLevel;
+		this.waveset.repeatSwapNormLevel = norm;
+		this.waveset.repeatSwapLev = repeatAdd;
+	}
+
 
 	shuffleSets{arg amt;
 		this.waveset.shouldShuffle = true;
@@ -410,7 +436,14 @@ WavesetTransformerPlayer {
 		this.breakSwap(swapTime);
 	}
 
+	fadeOut{
+		this.waveset.decBreak = true;
+		this.waveset.breakAmount = {rrand(30, 30)};
+		this.contBreak = false;
+	}
+
 	breakSwap{arg waitAmount = 2;
+		this.waveset.breakPoint = this.breakTop;
 		Routine({
 			while({this.contBreak.value()},{
 				this.waveset.breakPointSet = rrand(this.breakBottom, this.breakTop);
@@ -430,6 +463,7 @@ WavesetTransformerPlayer {
 			base + 0.5825 - 0.2499 + 0.415,
 			base - 0.2499 + 0.415
 		];
+		this.shouldPlaySeries = true;
 		Routine({
 			while({this.shouldPlaySeries},{
 				notes.do({arg note;
@@ -486,6 +520,7 @@ WavesetTransformerPlayer {
 		];
 		var notes = [dor, aeo, minor, major];
 		var useNotes = notes.choose;
+		this.shouldPlayMode = true;
 		Routine({
 			while({this.shouldPlayMode},{
 				if(this.shouldSwitchMode, {useNotes = notes.choose});
@@ -500,6 +535,7 @@ WavesetTransformerPlayer {
 	}
 
 	speedRandomDirect{arg waitAmount = 0.5, speedStart, minSpeed, maxSpeed, direction = 0;
+		this.contSpeedDirectBreak = true;
 		Routine({
 			var origSpeed = speedStart ?? this.waveset.baseSpeed.value();
 			var speedMultiple;
@@ -535,6 +571,7 @@ WavesetTransformerPlayer {
 	}
 
 	speedRandom{arg waitAmount = 0.5, speedStart, minSpeed, maxSpeed;
+		this.contSpeedRandomBreak = true;
 		Routine({
 			var origSpeed = speedStart ?? this.waveset.baseSpeed.value();
 			var speedMultiple;
@@ -568,6 +605,7 @@ WavesetTransformerPlayer {
 	}
 
 	multiplierRandomDirect{arg waitAmount = 0.5, multiplierStart, minMultiplier, maxMultiplier, direction = 0;
+		this.contMultiplierDirectBreak = true;
 		Routine({
 			var origMultiplier = multiplierStart ?? this.waveset.multiplier.value();
 			var multiplierMultiple;
@@ -603,6 +641,7 @@ WavesetTransformerPlayer {
 	}
 
 	multiplierRandom{arg waitAmount = 0.5, multiplierStart, minMultiplier, maxMultiplier;
+		this.contMultiplierRandomBreak = true;
 		Routine({
 			var origMultiplier = multiplierStart ?? this.waveset.multiplier.value();
 			var multiplierMultiple;
@@ -637,7 +676,7 @@ WavesetTransformerPlayer {
 
 	startFlop{
 		this.sayWow(7,2);
-		this.ensound(2,2);
+		this.ensound(1,3);
 		this.waveset.breakAmount = {rrand(0.001, 0.05)};
 		this.waveset.decBreak = true;
 		this.contBreak = {true};

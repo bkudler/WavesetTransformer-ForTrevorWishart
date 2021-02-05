@@ -326,6 +326,11 @@ Synth(\wsDelay, addAction:\addToTail);
 // repeats;
 // baseSpeed;
 // speedSwapAmt;
+// distance
+// shuffAmt
+// modAmt
+// plusAmt
+// waveSubMod
 
 
 //bigger numbers louder for each

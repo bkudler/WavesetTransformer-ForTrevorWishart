@@ -8,6 +8,7 @@ This creates an interface in SuperCollider for working with all of the waveset t
 
 
 ​First code examples:
+
 ​
 code::
 //you'll need a bunch of files to convert to wavesets and preform various transformations

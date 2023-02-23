@@ -1,18 +1,18 @@
 WavesetTransformerPlayer {
 	var <>waveset, <>currFunc, <>holderCurrSet, <>holderLeaveOneSet;
-	var <>holderLeaveTwoSet, <>holderTransferSetOne, <>holderTransferSetTwo;
+	var <>holderLeaveTwoSet, <>holderTransferSet;
 	var <>breakBottom = 9, <>breakTop = 20;
 	var <>snapShot;
 	var <>contBreak;
 	var <>shouldScrambleSeries = false, <>shouldPlaySeries = false;
 	var <>contMultiplierRandomBreak = false, <>contMultiplierDirectBreak = false, <>contSpeedRandomBreak = false, <>contSpeedDirectBreak = false, <>shouldPlayMode = false, <>shouldSwitchMode = false;
 
-	*new {| subBufNum, files, wsOut, mainOut  |
-        ^super.new.init(subBufNum, files, wsOut, mainOut);
+	*new {| subBufNum, files, mainOut, fxOut  |
+        ^super.new.init(subBufNum, files, mainOut, fxOut);
     }
 
-	init {| subBufNum, files, wsOut, mainOut  |
-		this.waveset = WavesetTransformer(subBufNum, files, wsOut, mainOut);
+	init {| subBufNum, files, mainOut, fxOut |
+		this.waveset = WavesetTransformer(subBufNum, files, mainOut, fxOut);
 		this.waveset.randomWave();
 		this.waveset.subBuf.plot();
 		this.snapShot = ();
@@ -20,7 +20,7 @@ WavesetTransformerPlayer {
     }
 
 	go{arg amt;
-		this.ensound(1,1);
+		this.ensound(0.85,0.85);
 		^this.waveset.go(amt)
 	}
 
@@ -41,8 +41,169 @@ WavesetTransformerPlayer {
 		this.ensound(0,0);
 	}
 
+	ramp{arg waveset_property, time, amt;
+		var functions =
+		(
+				amp: {arg val; this.waveset.setAmpAmt(val)},
+			    add: {arg val; this.waveset.setAmpAdd(val)},
+				waveSetAmount: {arg val; this.waveset.waveSetAmount_(val)},
+				multiplier: {arg val; this.waveset.multiplier_(val)},
+				repeats: {arg val; this.waveset.repeats_(val)},
+				baseSpeed: {arg val; this.waveset.baseSpeed_(val)},
+				distance: {arg val; this.waveset.distance_(val)},
+				speed2: {arg val; this.waveset.speed2_(val)},
+				startModFreq: {arg val; this.waveset.startModFreq_(val)},
+				startAmt: {arg val; this.waveset.startAmt_(val)},
+				breakBottom: {arg val; this.breakBottom_(val)},
+				breakTop: {arg val; this.breakTop_(val)},
+				breakAmount: {arg val; this.waveset.breakAmount_(val)},
+				shrinkAmt: {arg val; this.waveset.shrinkAmt_(val)},
+				shuffAmount: {arg val; this.waveset.shuffAmount_(val)},
+				waveSubMod: {arg val; this.waveset.waveSubMod_(val)},
+			    pan: {arg val; this.waveset.pan_(val)},
+			    panLevel: {arg val; this.waveset.panLevel_(val)},
+			    panNormLevel: {arg val; this.waveset.panNormLevel_(val)},
+			    longSwapLevel: {arg val; this.waveset.longSwapLevel_(val)},
+			    longSwapNormLevel: {arg val; this.waveset.longSwapNormLevel_(val)},
+			    speedSwapAmt: {arg val; this.waveset.speedSwapAmt_(val)},
+			    multiLongSwapLevel: {arg val; this.waveset.multiLongSwapLevel_(val)},
+			    multiLongSwapNormLevel:{arg val; this.waveset.multiLongSwapNormLevel_(val)},
+			    multiSwapAmt: {arg val; this.waveset.multiSwapAmt_(val)},
+			    repeatSwapLevel: {arg val; this.waveset.repeatSwapLevel_(val)},
+			    repeatSwapNormLevel: {arg val; this.waveset.repeatSwapNormLevel_(val)},
+			    repeatSwapLev: {arg val; this.waveset.repeatSwapLev_(val)},
+			    harmLevel: {arg val; this.waveset.harmLevel_(val)},
+			    harmonizeLevel:{arg val; this.waveset.harmonizeLevel_(val)},
+			    harmonizeNormLevel:{arg val; this.waveset.harmonizeNormLevel_(val)},
+			    deleteLevel:{arg val; this.waveset.deleteLevel_(val)},
+			    deleteNormLevel:{arg val; this.waveset.deleteNormLevel_(val)},
+			    reverseLevel: {arg val; this.waveset.reverseLevel_(val)},
+			    reverseNormLevel: {arg val; this.waveset.reverseNormLevel_(val)},
+			    transferLevel: {arg val; this.waveset.transferLevel_(val)},
+			    transferNormLevel: {arg val; this.waveset.transferNormLevel_(val)},
+			    interleaveOneLevel: {arg val; this.waveset.interleaveOneLevel_(val)},
+			    interleaveOneNormLevel: {arg val; this.waveset.interleaveOneNormLevel_(val)},
+			    interleaveTwoLevel: {arg val; this.waveset.interleaveTwoLevel_(val)},
+			    interleaveTwoNormLevel: {arg val; this.waveset.interleaveTwoNormLevel_(val)},
+			    normalizeAmount:{arg val; this.waveset.normalizeAmount_(val)},
+			    normalizeThresh:{arg val; this.waveset.normalizeThresh_(val)},
+			    subLevel:{arg val; this.waveset.subLevel_(val)},
+			    subNormLevel:{arg val; this.waveset.subNormLevel_(val)},
+			    fxLevel:{arg val; this.waveset.fxLevel_(val)},
+			    fxNormLevel:{arg val; this.waveset.fxNormLevel_(val)}
+		);
+
+		var values =
+		(
+			amp:{this.waveset.ampAmt},
+			add:{this.waveset.ampAdd},
+			waveSetAmount: {this.waveset.waveSetAmount},
+			multiplier: {this.waveset.multiplier},
+			repeats: {this.waveset.repeats},
+			baseSpeed: {this.waveset.baseSpeed},
+			distance: {this.waveset.distance},
+			speed2: {this.waveset.speed2},
+			startModFreq: {this.waveset.startModFreq},
+			startAmt: {this.waveset.startAmt},
+			breakBottom: {this.breakBottom},
+			breakTop: {this.breakTop},
+			breakAmount: {this.waveset.breakAmount},
+			shrinkAmt: {this.waveset.shrinkAmt},
+			shuffAmount:  {this.waveset.shuffAmount},
+			waveSubMod: {this.waveset.waveSubMod},
+			pan: {this.waveset.pan},
+			panLevel: {this.waveset.panLevel},
+			panNormLevel: {this.waveset.panNormLevel},
+			longSwapLevel: {this.waveset.longSwapLevel},
+			longSwapNormLevel: {this.waveset.longSwapNormLevel},
+			speedSwapAmt: {this.waveset.speedSwapAmt},
+			multiLongSwapLevel: {this.waveset.multiLongSwapLevel},
+			multiLongSwapNormLevel:{this.waveset.multiLongSwapNormLevel},
+			multiSwapAmt: {this.waveset.multiSwapAmt},
+			repeatSwapLevel: {this.waveset.repeatSwapLevel},
+			repeatSwapNormLevel: {this.waveset.repeatSwapNormLevel},
+			repeatSwapLev: {this.waveset.repeatSwapLev},
+			harmLevel: {this.waveset.harmLevel},
+			harmonizeLevel:{this.waveset.harmonizeLevel},
+			harmonizeNormLevel:{this.waveset.harmonizeNormLevel},
+			deleteLevel:{this.waveset.deleteLevel},
+			deleteNormLevel:{this.waveset.deleteNormLevel},
+			reverseLevel: {this.waveset.reverseLevel},
+			reverseNormLevel: {this.waveset.reverseNormLevel},
+			transferLevel: {this.waveset.transferLevel},
+			transferNormLevel: {this.waveset.transferNormLevel},
+			interleaveOneLevel: {this.waveset.interleaveOneLevel},
+			interleaveOneNormLevel: {this.waveset.interleaveOneNormLevel},
+			interleaveTwoLevel: {this.waveset.interleaveTwoLevel},
+			interleaveTwoNormLevel: {this.waveset.interleaveTwoNormLevel},
+			normalizeAmount:{this.waveset.normalizeAmount},
+			normalizeThresh:{this.waveset.normalizeThresh},
+			subLevel:{this.waveset.subLevel},
+			subNormLevel:{this.waveset.subNormLevel},
+			fxNormLevel: {this.waveset.fxNormLevel},
+			fxLevel: {this.waveset.fxLevel}
+		);
+
+
+		var routine = Routine({
+			var curr_value = values[waveset_property].value().value();
+			var diff = (curr_value - amt).value();
+			var new_value = curr_value;
+			var set_value;
+			var loop_amt = (time/0.001).asInteger;
+			var change_amt = diff/loop_amt;
+
+			loop_amt.do({
+				new_value = new_value - change_amt;
+				set_value = new_value;
+				if(waveset_property == \waveSetAmount, {set_value = new_value.asInteger});
+				if(waveset_property == \shuffleSets, {set_value = new_value.asInteger});
+				if(waveset_property == \breakBottom, {set_value = new_value.asInteger});
+				if(waveset_property == \breakTop, {set_value = new_value.asInteger});
+				if(waveset_property == \shuffAmount, {set_value = new_value.asInteger});
+				if(waveset_property == \panLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \panNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \longSwapLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \longSwapNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \multiLongSwapLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \multiLongSwapNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \repeatSwapLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \repeatSwapNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \repeatSwapLev, {set_value = new_value.asInteger});
+				if(waveset_property == \harmonizeLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \harmonizeNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \deleteLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \deleteNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \reverseLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \reverseNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \transferLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \transferNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \interleaveOneLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \interleaveOneNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \interleaveTwoLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \interleaveTwoNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \normalizeAmount, {set_value = new_value.asInteger});
+				if(waveset_property == \subLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \subNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \fxNormLevel, {set_value = new_value.asInteger});
+				if(waveset_property == \fxLevel, {set_value = new_value.asInteger});
+
+
+
+				functions[waveset_property].value(set_value);
+				0.001.wait;
+			});
+			functions[waveset_property].value(amt);
+			this.waveset.ws_scout.call_action(\rampEnds);
+		});
+		routine.play;
+
+	}
+
+
 	norm{
 		this.currFunc = "norm";
+		this.ensound(0.85,0.85);
 		this.waveset.shouldAverage = false;
 		this.waveset.waveSetAmount = {1};
 		this.waveset.multiplier = {1};
@@ -65,8 +226,7 @@ WavesetTransformerPlayer {
 		this.waveset.shouldPan = false;
 		this.waveset.decBreak = false;
 		this.waveset.shouldHarmonize = false;
-		this.waveset.shouldTransferOne = false;
-		this.waveset.shouldTransferTwo = false;
+		this.waveset.shouldTransfer = false;
 		this.waveset.shouldInterleaveOne = false;
 		this.waveset.shouldInterleaveTwo = false;
 		this.waveset.shouldNormalize = false;
@@ -76,6 +236,7 @@ WavesetTransformerPlayer {
 		this.waveset.shouldRepeatSwap = false;
 		this.waveset.shouldMultiLongSwap = false;
 		this.waveset.shouldLongSwap = false;
+		this.waveset.shouldFx = false;
 	}
 
 	climb{
@@ -298,9 +459,9 @@ WavesetTransformerPlayer {
 	transferBlang{
 		this.norm();
 		this.currFunc = "transferBlang";
-		this.waveset.shouldTransferTwo = true;
-		this.waveset.transferTwoLevel = 2;
-		this.waveset.transferTwoNormLevel = 2;
+		this.waveset.shouldTransfer = true;
+		this.waveset.transferLevel = 2;
+		this.waveset.transferNormLevel = 2;
 		this.waveset.speedSwapModulo = 3;
 		this.waveset.speedSwapAmt = 0.7;
 		this.waveset.decBreak = true;
@@ -385,16 +546,10 @@ WavesetTransformerPlayer {
 		this.waveset.harmonizeNormLevel = normAmt;
 	}
 
-	transferSetsOne{arg transfer, norm;
-		this.waveset.shouldTransferOne = true;
-		this.waveset.transferOneLevel = transfer;
-		this.waveset.transferOneNormLevel = norm;
-	}
-
-	transferSetsTwo{arg transfer, norm;
-		this.waveset.shouldTransferTwo = true;
-		this.waveset.transferTwoLevel = transfer;
-		this.waveset.transferTwoNormLevel = norm;
+	transferSets{arg transfer, norm;
+		this.waveset.shouldTransfer = true;
+		this.waveset.transferLevel = transfer;
+		this.waveset.transferNormLevel = norm;
 	}
 
 	interleaveSetsOne{arg inter, norm;
@@ -407,6 +562,12 @@ WavesetTransformerPlayer {
 		this.waveset.shouldInterleaveTwo = true;
 		this.waveset.interleaveTwoLevel = inter;
 		this.waveset.interleaveTwoNormLevel = norm;
+	}
+
+	fxSwap{arg fx, norm;
+		this.waveset.shouldFx = true;
+		this.waveset.fxLevel = fx;
+		this.waveset.fxNormLevel = norm;
 	}
 
 	normalizeSets{arg alize, thresh;
@@ -436,10 +597,9 @@ WavesetTransformerPlayer {
 		this.breakSwap(swapTime);
 	}
 
-	fadeOut{
-		this.waveset.decBreak = true;
-		this.waveset.breakAmount = {rrand(30, 30)};
-		this.contBreak = false;
+	fadeOut{arg time;
+		this.ramp(\add, time, 0);
+		this.ramp(\amp, time, 0);
 	}
 
 	breakSwap{arg waitAmount = 2;
@@ -472,62 +632,6 @@ WavesetTransformerPlayer {
 				});
 				if(this.shouldScrambleSeries, {
 					notes = notes.scramble;
-				});
-			});
-			this.waveset.baseSpeed = {base};
-		}).play;
-	}
-
-	playMode{arg base = 1, waitAmount = 0.5;
-		var major = [
-			base,
-			base + 0.083,
-			base + 0.083*2,
-			base + (0.083*2) + (0.083/2),
-			base + (0.083*3),
-			base + (0.083*4),
-			base + (0.083*5),
-		];
-		var aeo = [
-			base,
-			base + 0.083,
-			base + 0.083 + (0.083/2),
-			base + (0.083*2),
-			base + (0.083*3),
-			base + (0.083*3) + (0.083/2),
-			base + (0.083*5),
-			base + (0.083*6),
-		];
-		var dor = [
-			base,
-			base + 0.083,
-			base + (0.083*2),
-			base + (0.083*2) + (0.083/2),
-			base + (0.083*4),
-			base + (0.083*5),
-			base + (0.083*6),
-			base + (0.083*6) + (0.083/2),
-		];
-		var minor = [
-			base,
-			base + 0.083,
-			base + (0.083*2) + (0.083/2),
-			base + (0.083*3),
-			base + (0.083*4),
-			base + (0.083*5),
-			base + (0.083*6) + (0.083/2),
-			base + (0.083*7),
-		];
-		var notes = [dor, aeo, minor, major];
-		var useNotes = notes.choose;
-		this.shouldPlayMode = true;
-		Routine({
-			while({this.shouldPlayMode},{
-				if(this.shouldSwitchMode, {useNotes = notes.choose});
-				useNotes = [useNotes.reverse, useNotes.scramble, useNotes].choose;
-				useNotes.do({arg note;
-					this.waveset.baseSpeed = {note};
-					waitAmount.wait;
 				});
 			});
 			this.waveset.baseSpeed = {base};
@@ -675,13 +779,13 @@ WavesetTransformerPlayer {
 	}
 
 	startFlop{
-		this.sayWow(7,2);
-		this.ensound(1,3);
+		this.sayWow(5,2);
 		this.waveset.breakAmount = {rrand(0.001, 0.05)};
 		this.waveset.decBreak = true;
 		this.contBreak = {true};
 		this.breakBottom = 8;
 		this.breakTop = 30;
+		this.waveset.waveSetAmount = {50};
 		this.breakSwap(0.02);
 	}
 
@@ -733,14 +837,9 @@ WavesetTransformerPlayer {
 		this.waveset.leaveTwoSet = waveset;
 	}
 
-	changeTransferSetOne{arg waveset;
-		this.holderTransferSetOne = this.waveset.transferSetOne;
-		this.waveset.transferSetOne = waveset;
-	}
-
-	changeTransferSetTwo{arg waveset;
-		this.holderTransferSetTwo = this.waveset.transferSetTwo;
-		this.waveset.transferSetTwo = waveset;
+	changeTransferSet{arg waveset;
+		this.holderTransferSet = this.waveset.transferSet;
+		this.waveset.transferSet = waveset;
 	}
 
 	returnCurrSet{
@@ -756,12 +855,8 @@ WavesetTransformerPlayer {
 		this.waveset.leaveTwoSet = this.holderLeaveTwoSet;
 	}
 
-	returnTransferSetOne{
-		this.waveset.transferSetOne = this.holderTransferSetOne;
-	}
-
-	returnTransferSetTwo{
-		this.waveset.transferSetTwo = this.holderTransferSetTwo;
+	returnTransferSet{
+		this.waveset.transferSet = this.holderTransferSet;
 	}
 
 	takeSnapshot{
@@ -805,12 +900,9 @@ WavesetTransformerPlayer {
 		this.snapShot.harmLevel = this.waveset.harmLevel;
 		this.snapShot.harmonizeLevel = this.waveset.harmonizeLevel;
 		this.snapShot.harmonizeNormLevel = this.waveset.harmonizeNormLevel;
-		this.snapShot.shouldTransferOne = this.waveset.shouldTransferOne;
-		this.snapShot.transferOneLevel = this.waveset.transferOneLevel;
-		this.snapShot.transferOneNormLevel = this.waveset.transferOneNormLevel;
-		this.snapShot.shouldTransferTwo = this.waveset.shouldTransferTwo;
-		this.snapShot.transferTwoLevel = this.waveset.transferTwoLevel;
-		this.snapShot.transferTwoNormLevel = this.waveset.transferTwoNormLevel;
+		this.snapShot.shouldTransfer = this.waveset.shouldTransfer;
+		this.snapShot.transferLevel = this.waveset.transferLevel;
+		this.snapShot.transferNormLevel = this.waveset.transferNormLevel;
 		this.snapShot.shouldInterleaveOne = this.waveset.shouldInterleaveOne;
 		this.snapShot.interleaveOneLevel = this.waveset.interleaveOneLevel;
 		this.snapShot.interleaveOneNormLevel = this.waveset.interleaveOneNormLevel;
@@ -825,12 +917,99 @@ WavesetTransformerPlayer {
 		this.snapShot.waveSubMod = this.waveset.waveSubMod;
 		this.snapShot.shouldShrink = this.waveset.shouldShrink;
 		this.snapShot.shrinkAmt = this.waveset.shrinkAmt;
+		this.snapShot.shouldFx = this.waveset.shouldFx;
+		this.snapShot.fxLevel = this.waveset.fxLevel;
+		this.snapShot.fxNormLevel = this.waveset.fxNormLevel;
+		this.snapShot.shouldLongSwap = this.waveset.shouldLongSwap;
+		this.snapShot.longSwapLevel = this.waveset.longSwapLevel;
+		this.snapShot.longSwapNormLevel = this.waveset.longSwapNormLevel;
+		this.snapShot.speedSwapAmt = this.waveset.speedSwapAmt;
+		this.snapShot.shouldMultiLongSwap =  this.waveset.shouldMultiLongSwap;
+		this.snapShot.multiLongSwapLevel = this.waveset.multiLongSwapLevel;
+		this.snapShot.multiLongSwapNormLevel = this.waveset.multiLongSwapNormLevel;
+		this.snapShot.multiSwapAmt = this.waveset.multiSwapAmt;
+		this.snapShot.shouldRepeatSwap = this.waveset.shouldRepeatSwap;
+		this.snapShot.repeatSwapLevel = this.waveset.repeatSwapLevel;
+		this.snapShot.repeatSwapNormLevel = this.waveset.repeatSwapNormLevel;
+		this.snapShot.repeatSwapLev = this.waveset.repeatSwapLev;
 	}
 
 	showSnapshot{
 		this.snapShot.keys.asList.copyRange(0, this.snapShot.keys.size - 1).do({arg prop;
 			[prop.asString + " : " +  this.snapShot[prop.asSymbol].asString].postln;
 		});
+	}
+
+	setSnapshot{
+		this.currFunc = this.snapShot.currFunc;
+		this.waveset.shouldAverage = this.snapShot.shouldAverage;
+		this.waveset.inst = this.snapShot.inst;
+		this.waveset.waveSetAmount = this.snapShot.waveSetAmount;
+		this.waveset.repeats = this.snapShot.repeats;
+		this.waveset.baseSpeed = this.snapShot.baseSpeed;
+		this.waveset.distance = this.snapShot.distance;
+		this.waveset.speedChangeModulo = this.snapShot.speedChangeModulo;
+		this.waveset.speedMod = this.snapShot.speedMod;
+		this.waveset.plusAmount = this.snapShot.plusAmount;
+		this.waveset.multiplier = this.snapShot.multiplier;
+		this.waveset.shouldAverage = this.snapShot.shouldAverage;
+		this.waveset.shouldSwap = this.snapShot.shouldSwap;
+		this.waveset.shouldShuffle = this.snapShot.shouldShuffle;
+		this.waveset.shuffAmount = this.snapShot.shuffAmount;
+		this.waveset.shouldDelete = this.snapShot.shouldDelete;
+		this.waveset.deleteLevel = this.snapShot.deleteLevel;
+		this.waveset.deleteNormLevel = this.snapShot.deleteNormLevel;
+		this.waveset.shouldDeletePause = this.snapShot.shouldDeletePause;
+		this.waveset.shouldRandomDelete = this.snapShot.shouldRandomDelete;
+		this.waveset.deleteReceiver = this.snapShot.deleteReceiver;
+		this.waveset.deleteDeviation = this.snapShot.deleteDeviation;
+		this.waveset.shouldSub = this.snapShot.shouldSub;
+		this.waveset.subLevel = this.snapShot.subLevel;
+		this.waveset.subNormLevel = this.snapShot.subNormLevel;
+		this.waveset.shouldReverse = this.snapShot.shouldReverse;
+		this.waveset.reverseLevel = this.snapShot.reverseLevel;
+		this.waveset.reverseNormLevel = this.snapShot.reverseNormLevel;
+		this.waveset.pan = this.snapShot.pan;
+		this.waveset.shouldPan = this.snapShot.shouldPan;
+		this.waveset.panLevel = this.snapShot.panLevel;
+		this.waveset.panNormLevel = this.snapShot.panNormLevel;
+		this.waveset.decBreak = this.snapShot.decBreak;
+		this.contBreak = this.snapShot.contBreak;
+		this.breakBottom = this.snapShot.breakBottom;
+		this.breakTop = this.snapShot.breakTop;
+		this.waveset.shouldHarmonize = this.snapShot.shouldHarmonize;
+		this.waveset.harmLevel = this.snapShot.harmLevel;
+		this.waveset.harmonizeLevel = this.snapShot.harmonizeLevel;
+		this.waveset.harmonizeNormLevel = this.snapShot.harmonizeNormLevel;
+		this.waveset.shouldTransfer = this.snapShot.shouldTransfer;
+		this.waveset.transferLevel = this.snapShot.transferLevel;
+		this.waveset.transferNormLevel = this.snapShot.transferNormLevel;
+		this.waveset.shouldInterleaveOne = this.snapShot.shouldInterleaveOne;
+		this.waveset.interleaveOneLevel = this.snapShot.interleaveOneLevel;
+		this.waveset.interleaveOneNormLevel = this.snapShot.interleaveOneNormLevel;
+		this.waveset.shouldInterleaveTwo = this.snapShot.shouldInterleaveTwo;
+		this.waveset.interleaveTwoLevel = this.snapShot.interleaveTwoLevel;
+		this.waveset.interleaveTwoNormLevel = this.snapShot.interleaveTwoNormLevel;
+		this.waveset.shouldNormalize = this.snapShot.shouldNormalize;
+		this.waveset.normalizeAmount = this.snapShot.normalizeAmount;
+		this.waveset.normalizeThresh = this.snapShot.normalizeThresh;
+		this.waveset.speedSwapModulo = this.snapShot.speedSwapModulo;
+		this.waveset.speedSwapAmt = this.snapShot.speedSwapAmt;
+		this.waveset.waveSubMod = this.snapShot.waveSubMod;
+		this.waveset.shouldShrink = this.snapShot.shouldShrink;
+		this.waveset.shrinkAmt = this.snapShot.shrinkAmt;
+		this.waveset.shouldLongSwap = this.snapShot.shouldLongSwap;
+		this.waveset.longSwapLevel = this.snapShot.longSwapLevel;
+		this.waveset.longSwapNormLevel = this.snapShot.longSwapNormLevel;
+		this.waveset.speedSwapAmt = this.snapShot.speedSwapAmt;
+		this.waveset.shouldMultiLongSwap =  this.snapShot.shouldMultiLongSwap;
+		this.waveset.multiLongSwapLevel = this.snapShot.multiLongSwapLevel;
+		this.waveset.multiLongSwapNormLevel = this.snapShot.multiLongSwapNormLevel;
+		this.waveset.multiSwapAmt = this.snapShot.multiSwapAmt;
+		this.waveset.shouldRepeatSwap = this.snapShot.shouldRepeatSwap;
+		this.waveset.repeatSwapLevel = this.snapShot.repeatSwapLevel;
+		this.waveset.repeatSwapNormLevel = this.snapShot.repeatSwapNormLevel;
+		this.waveset.repeatSwapLev = this.snapShot.repeatSwapLev;
 	}
 }
 

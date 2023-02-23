@@ -1,7 +1,7 @@
 (
 	name:		"WavesetTransformer-ForTrevorWishart",
 	path:		"WavesetTransformer-ForTrevorWishart",
-    dependencies: ["Wavesets", "https://github.com/bkudler/Scout"],
+    	dependencies: ["Wavesets", "https://github.com/bkudler/Scout"],
 	summary:	"all the waveset transformers described by Trevor Wishart",
 	author:	    "Ben Kudler"
 )

@@ -18,8 +18,8 @@ There is no graphical user interface (some like to say GUI, pronounced gooey). I
 
 <img width="965" alt="Screen Shot 2023-02-22 at 7 58 07 PM" src="https://user-images.githubusercontent.com/16430294/220798595-fc0739ae-2035-4093-a47c-41a5724f13ea.png">
 
+<img width="972" alt="Screen Shot 2023-02-22 at 7 58 14 PM" src="https://user-images.githubusercontent.com/16430294/220798838-a0f9d6b5-59ae-49ca-b2ef-f5493c5d8362.png">
 
-<img width="977" alt="Screen Shot 2023-02-22 at 7 57 51 PM" src="https://user-images.githubusercontent.com/16430294/220798603-c9b29af9-561c-406d-9aa6-28c09790edd8.png">
 
 There is more behind the choice to not include a GUI than laziness or putting barrier between the player and the software —though those were motivators. From a practical standpoint, there maybe actions a player wants to take that are physically difficult or impractical with a GUI, for instance moving a series of knobs in different directions (some up, some down) while pushing buttons that are far away on the screen or whatever outboard controller the player has mapped the GUI to. Executing several disparate commands, as one would do by pushing buttons and moving knobs, in real time is as easy as executing a single command. There are, of course, pitfalls to this approach, for instance having to group all of the commands together in the text editor before executing them, but this is a rather small trade off. Another point of practical ease is being able to set the parameters to exact values, rather than having to approximate with sliders and knobs.
 
@@ -43,14 +43,15 @@ One more level up on the elevator, to the final stop, aesthetic and philosophica
 
 3. Install this quark. There are lots of ways to install quarks. [This page](https://doc.sccode.org/Guides/UsingQuarks.html) lists some of them. The recommended way of installation is to run the following line of code:
 
-  `Quarks.install("https://github.com/bkudler/WavesetTransformer-ForTrevorWishart")`.
-   This will install the Waveset instrument.
+    `Quarks.install("https://github.com/bkudler/WavesetTransformer-ForTrevorWishart")`.
+    
+    This will install the Waveset instrument. It may take a moment, be patient.
 
 4. Recompile the class library.
 
-  In the standard SuperCollider interface, in the bottom right corner there is a monitor for the interpreter and the server. Click where it says "active", next to the interpreter and select "Recompile Class Library".
+    In the standard SuperCollider interface, in the bottom right corner there is a monitor for the interpreter and the server. Right click where it says "active", next to the interpreter, and select "Recompile Class Library".
 
-<img width="311" alt="Screen Shot 2023-02-22 at 7 59 45 PM" src="https://user-images.githubusercontent.com/16430294/220798724-1c7e012f-7736-4c1e-8069-3bd699f5466b.png">
+    <img width="311" alt="Screen Shot 2023-02-22 at 7 59 45 PM" src="https://user-images.githubusercontent.com/16430294/220798724-1c7e012f-7736-4c1e-8069-3bd699f5466b.png">
 
 
 ## Getting Sound

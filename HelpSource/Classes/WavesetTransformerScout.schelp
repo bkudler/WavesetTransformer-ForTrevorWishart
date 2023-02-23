@@ -1,6 +1,7 @@
 TITLE:: WavesetTransformerScout
 summary:: scouts on events that the waveset transformer emits
 categories:: wavesets, microsound
+related:: Classes/Wavesets, Classes/WavesetTransformer
 
 DESCRIPTION::
 

@@ -50,7 +50,8 @@ One more level up on the elevator, to the final stop, aesthetic and philosophica
 
 3. Install this quark. There are lots of ways to install quarks. [This page](https://doc.sccode.org/Guides/UsingQuarks.html) lists some of them. The recommended way of installation is to run the following line of code:
 
- `Quarks.install("https://github.com/bkudler/WavesetTransformer-ForTrevorWishart")`. This will install the Waveset instrument.
+  `Quarks.install("https://github.com/bkudler/WavesetTransformer-ForTrevorWishart")`.
+   This will install the Waveset instrument.
 
 4. Recompile the class library.
 

@@ -1,7 +1,7 @@
 (
 	name:		"WavesetTransformer-ForTrevorWishart",
 	path:		"WavesetTransformer-ForTrevorWishart",
-    	dependencies: ["Wavesets", "https://github.com/supercollider/sc3-plugins/blob/main/source/LoopBufUGens/sc/classes/LJP%20Classes/ProbabilityDistributions.sc"],
+    dependencies: ["Wavesets", "https://github.com/bkudler/Scout"],
 	summary:	"all the waveset transformers described by Trevor Wishart",
 	author:	    "Ben Kudler"
 )

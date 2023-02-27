@@ -1,12 +1,15 @@
 # WavesetTransformer: For Trevor Wishart
 
-  
 
 ## In short...
 
 This group of classes for SuperCollider constitute a fully playable instrument utilizing the [waveset](http://www.trevorwishart.co.uk/transformation.html) form of granular synthesis pioneered by [Trevor Wishart](https://en.wikipedia.org/wiki/Trevor_Wishart). The software includes all of the waveset transformations described by Wishart, as documented in [Curtis Road's](https://en.wikipedia.org/wiki/Curtis_Roads) [Microsound book](https://monoskop.org/images/d/d1/Roads_Curtis_Microsound.pdf), plus a few extra of my own discovery. A waveset, is a chunk of a waveform that crosses zero on the x-axis. This description isn't of much importance to use of the instrument, other than to say, the instrument takes a waveform (an audio file) and breaks it into many small chunks of sound --grains, if the reader prefers-- and allows for the manipulation of each individual chunk. The instrument can be used for live performance, live playback, or as a tool for creating sounds to be edited together, that is, the instrument functions as any other electronic instrument.
 
-  
+ Tutorial videos and some sounds made with the software can be found [here](https://drive.google.com/drive/folders/1iEzP5V_tBxfhUb5TMoJkKBgdawS8afj9?usp=share_link).
+
+The help files for WavesetTransformerPlayer also explain how to use this instrument and what each transformation does. A help file can be accessed by placing a cursor over the class name and hitting `cmd d`, as seen below.
+
+<img width="506" alt="Screen Shot 2023-02-26 at 7 29 15 PM" src="https://user-images.githubusercontent.com/16430294/221447129-eaad0bf6-b151-44be-9b10-1c83c2e6ef77.png">
 
 ## Interface
 
@@ -49,23 +52,30 @@ One more level up on the elevator, to the final stop, aesthetic and philosophica
 
 4. Recompile the class library.
 
-    In the standard SuperCollider interface, in the bottom right corner there is a monitor for the interpreter and the server. Right click where it says "active", next to the interpreter, and select "Recompile Class Library".
+    In the standard SuperCollider interface, in the bottom right corner there is a monitor for the interpreter and the server. Click on the display that says "active", next to the interpreter, and select "Recompile Class Library".
 
     <img width="311" alt="Screen Shot 2023-02-22 at 7 59 45 PM" src="https://user-images.githubusercontent.com/16430294/220798724-1c7e012f-7736-4c1e-8069-3bd699f5466b.png">
 
-
 ## Getting Sound
 
---refer to starter files, download starter files
-
---video of getting sound
-
+Sample files to work with can be found [here](https://github.com/bkudler/waveset-starter-files), for the user who does not want to build the interface from scratch. Start with `boot-file.scd` to initialize and a WavesetTransformerPlayer object, which all sound will generate from. Use  `starter.scd` to tell that object to start making sound. The tutorials folder also contains a video called “Getting-Sound” which explains how to get started with this instrument. The help files for the WavesetTransformerPlayer contain more information on how to use the instrument, including helpful values for transformations.
 
 ## Using Transformations
 
--- video of transformations
+The file labeled `transformers.scd` contains more advanced transformations, that involve doing more than just changing one quality of a waveset. The video labeled “Using-Transformations” shows how this file can be used. Again, the help file also contains information on how to use these transformations.
   
-
 ## Advanced Usage
 
--- video of using scouts
+There is one advanced feature that doesn’t transform wavesets. A “Scout” class is built in with this quark, which calls a list of functions whenever certain things happen in the lifecycle of the waveset player. See the video “Advanced-Usage” for more information. The help file also has examples.
+
+The events are 
+
+1. wavesetEnd, triggered when a waveset finishes playing
+
+2. wavesetGroupEnd, triggered when a chunk of wavesets finish playing, as done with the customPhrase function
+
+3. rampEnds, triggered when a ramp function finishes.
+
+4. wavesetLoopEnd, triggered when a full loop of all the wavesets in the current set is complete.
+
+5. wavesetLoopsFinshed, triggered when all of the waveset loops are finished

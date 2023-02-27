@@ -63,6 +63,10 @@ Sample files to work with can be found [here](https://github.com/bkudler/waveset
 ## Using Transformations
 
 The file labeled `transformers.scd` contains more advanced transformations, that involve doing more than just changing one quality of a waveset. The video labeled “Using-Transformations” shows how this file can be used. Again, the help file also contains information on how to use these transformations.
+
+## Presets
+
+The file `presets.scd` in the starter files package has some presets that can be examined using the `takeSnapshot` and `showSnapshot` methods.
   
 ## Advanced Usage
 

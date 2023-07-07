@@ -11,9 +11,13 @@ The help files for WavesetTransformerPlayer also explain how to use this instrum
 
 <img width="506" alt="Screen Shot 2023-02-26 at 7 29 15 PM" src="https://user-images.githubusercontent.com/16430294/221447129-eaad0bf6-b151-44be-9b10-1c83c2e6ef77.png">
 
+After reading this ReadME it is advised to look at [this repo](https://github.com/bkudler/waveset-starter-files) as it contains files that will quickly help a player get started with the instrument and use it with ease.
+
 ## Interface
 
-There is no graphical user interface (some like to say GUI, pronounced “gooey”). Instead, the player interacts with this software through entering in values and executing lines of code using ScIDE, or another piece of software that can get sclang to execute and send messages from client to server. Not knowing what ScIDE is, or what the previous sentence means, won’t stop anyone from using this instrument. The only knowledge needed is that typing `shift` and `return` at the end of a line of text, or lines of text, in SuperCollider executes those lines of code, and, in this case, produces sound. New users of SuperCollider should complete up to step 05 in [this tutorial](https://doc.sccode.org/Tutorials/Getting-Started/00-Getting-Started-With-SC.html) before proceeding, it won’t take long.
+There is no graphical user interface (some like to say GUI, pronounced “gooey”). Instead, the player interacts with this software through entering in values and executing lines of code using ScIDE, or another piece of software that can get sclang to execute and send messages from client to server. Not knowing what ScIDE is, or what the previous sentence means, won’t stop anyone from using this instrument. The only knowledge needed is that typing `shift` and `return` at the end of a line of text, or lines of text, in SuperCollider executes those lines of code, and, in this case, produces sound. 
+
+New users of SuperCollider should complete up to step 05 in [this tutorial](https://doc.sccode.org/Tutorials/Getting-Started/00-Getting-Started-With-SC.html) before proceeding, it won’t take long.
 
   
 <img width="977" alt="Screen Shot 2023-02-22 at 7 57 51 PM" src="https://user-images.githubusercontent.com/16430294/220798582-37c8d49f-f7b0-4f26-964d-9965e6fc1c5a.png">

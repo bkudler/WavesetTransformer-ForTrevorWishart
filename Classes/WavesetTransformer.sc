@@ -401,10 +401,12 @@ WavesetTransformer {
 			length.do({arg j;
 
 				var amount;
+
 				if(this.switchSet, {
 					this.currSet = this.switchToSet;
 				});
 				amount = this.currSet.xings.size -  (this.waveSetAmount.value());
+				ws_scout.call_action(\wavesetLoopsStart);
 				amount.do({arg i;
 					var ev, speed, start, length, startFrame, endFrame, amp,harmEvents,
 					numWs, sustain, repeats, sum, origRate, wsDur, multiplier;

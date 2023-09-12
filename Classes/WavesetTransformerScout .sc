@@ -11,7 +11,7 @@ WavesetTransformerScout : Scout {
 			\wavesetGroupEnd: [],
 			\rampEnds: [],
 			\wavesetLoopEnd: [],
-			\wavesetLoopsFinshed: []
+			\wavesetLoopsFinshed: [],
 			\wavesetLoopsStart: []
 		);
 	}

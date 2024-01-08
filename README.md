@@ -44,7 +44,7 @@ A text based interface brings a small bit of writing to live music creation. The
 
 2. [Install the SC3-plugins](https://github.com/supercollider/sc3-plugins)
 
-    In reality the only file needed is [ProbabilityDistributions.sc](https://github.com/supercollider/sc3-plugins/blob/main/source/LoopBufUGens/sc/classes/LJP%20Classes/ProbabilityDistributions.sc). Add this file to the SuperCollider extensions folder, this can be found using the README for the SC3-extensions. The entire SC3-plugins folder is worth having and adds very little heft to SuperCollider. It is highly suggested to download the entire package, plus, it is easier for installation. For the reader who is unfamiliar with github, to download a file, click the green "Code" button in the top righthand corner.
+    In reality, the only file needed is [ProbabilityDistributions.sc](https://github.com/supercollider/sc3-plugins/blob/main/source/LoopBufUGens/sc/classes/LJP%20Classes/ProbabilityDistributions.sc). Add this file to the SuperCollider extensions folder, this can be found using the README for the SC3-extensions. The entire SC3-plugins folder is worth having and adds very little heft to SuperCollider. It is highly suggested to download the entire package, plus, it is easier for installation. For the reader who is unfamiliar with github, to download a file, click the green "Code" button in the top righthand corner.
 
 3. Install this quark. There are lots of ways to install quarks. [This page](https://doc.sccode.org/Guides/UsingQuarks.html) lists some of them. The recommended way of installation is to run the following line of code:
 

@@ -1,0 +1,21 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(;Test/compile; collectAnalyses, None, Some(CommandSource(network-1)))[0m
+[0m[[0m[0mdebug[0m] [0m[0munmatched Processing event for requestId None: None[0m
+[0m[[0m[0mdebug[0m] [0m[0munmatched Done event for requestId None: None[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(Test/compile, None, Some(CommandSource(network-1)))[0m
+[0m[[0m[0mdebug[0m] [0m[0munmatched Processing event for requestId None: None[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Test / compile[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, build/taskStart, {"taskId":{"id":"31","parents":[]},"eventTime":1705699330103,"message":"Compiling wavesettransformer-fortrevorwishart","dataKind":"compile-task","data":{"target":{"uri":"file:/Users/bkudler/code-projects/waveset-holder/WavesetTransformer-ForTrevorWishart/#wavesettransformer-fortrevorwishart/Compile"}}})[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, build/taskFinish, {"taskId":{"id":"31","parents":[]},"eventTime":1705699330106,"message":"Compiled wavesettransformer-fortrevorwishart","status":1,"dataKind":"compile-report","data":{"target":{"uri":"file:/Users/bkudler/code-projects/waveset-holder/WavesetTransformer-ForTrevorWishart/#wavesettransformer-fortrevorwishart/Compile"},"errors":0,"warnings":0,"time":3}})[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, build/taskStart, {"taskId":{"id":"32","parents":[]},"eventTime":1705699330110,"message":"Compiling wavesettransformer-fortrevorwishart-test","dataKind":"compile-task","data":{"target":{"uri":"file:/Users/bkudler/code-projects/waveset-holder/WavesetTransformer-ForTrevorWishart/#wavesettransformer-fortrevorwishart/Test"}}})[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, build/taskFinish, {"taskId":{"id":"32","parents":[]},"eventTime":1705699330114,"message":"Compiled wavesettransformer-fortrevorwishart-test","status":1,"dataKind":"compile-report","data":{"target":{"uri":"file:/Users/bkudler/code-projects/waveset-holder/WavesetTransformer-ForTrevorWishart/#wavesettransformer-fortrevorwishart/Test"},"errors":0,"warnings":0,"time":4}})[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 0 s, completed Jan 19, 2024, 4:22:10 PM[0m
+[0m[[0m[0mdebug[0m] [0m[0munmatched Done event for requestId None: None[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(collectAnalyses, None, Some(CommandSource(network-1)))[0m
+[0m[[0m[0mdebug[0m] [0m[0munmatched Processing event for requestId None: None[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / collectAnalyses[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0mdebug[0m] [0m[0manalysis location (/Users/bkudler/code-projects/waveset-holder/WavesetTransformer-ForTrevorWishart/target/scala-2.12/zinc/inc_compile_2.12.zip,true)[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 0 s, completed Jan 19, 2024, 4:22:10 PM[0m
+[0m[[0m[0mdebug[0m] [0m[0munmatched Done event for requestId None: None[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

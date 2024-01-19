@@ -184,11 +184,9 @@ WavesetTransformer {
 				squigSaw:  Signal.sineFill(512, Array.fill(20, {arg i; i = i + 1; (1/i ) } ), Array.fill(20, {arg i; i - 2})),
 				weirdSin: Signal.sineFill(512, [1,2]),
 				weirdSin2: Signal.sineFill(512, Array.fill(5, {arg i; (i - 1) * -1}), Array.fill(2, {arg i; i })),
-				//the stock market is taking a plunge
 				badStocks: Signal.sineFill(512, Array.fill(512, {arg i; i = i + 1; (i*0.5) + rrand(i, i + 2)/i})),
 				sin: Signal.sineFill(512, [1]),
 				highSin: Signal.sineFill(512, [20]),
-
 				weirdSqr: Signal.sineFill(512, Array.fill(512, {
 					arg i;
 					if( (i%2 !== 0), {
@@ -197,7 +195,6 @@ WavesetTransformer {
 						0;
 					});
 				})),
-				//okay time for the regular square
 				sqr: Signal.sineFill(512, Array.fill(512, {
 					arg i;
 					i = i + 1;
@@ -216,8 +213,6 @@ WavesetTransformer {
 						i;
 					});
 				}), Array.fill(20, {arg i; i = i+1; rrand(-1,i)}))*0.8,
-
-
 				iCallItM: Signal.sineFill(512, Array.fill(512,{arg i;
 					var div;
 					i = i + 1;
@@ -228,9 +223,6 @@ WavesetTransformer {
 						i;
 					});
 				}),Array.fill(50, {arg i; i = i+1; rrand(1,i)})),
-
-
-
 				skwagSaw: Signal.sineFill(512, Array.fill(512, {arg i;
 					i = i + 1;
 					if( (i%32 !== 0), {
@@ -251,8 +243,6 @@ WavesetTransformer {
 						});
 					});
 				})),
-
-
 				switchSqr: Signal.sineFill(512, Array.fill(512, {arg i;
 					i = i + 1;
 					if( (i%4 !== 0), {
@@ -261,10 +251,7 @@ WavesetTransformer {
 						0;
 					});
 				})),
-
-				//HNW!
 				hNW: Signal.sineFill(512, Array.fill(512, {1.0.rand2})),
-
 				sizzDown: Signal.sineFill(512, Array.fill(512, {arg i;
 					i = i + 1;
 					if( (i%32 !== 0), {
@@ -281,7 +268,6 @@ WavesetTransformer {
 						});
 					});
 				})),
-
 				crazyu: Signal.sineFill(512, Array.fill(512, {
 					arg i;
 					i = i + 1;
@@ -291,7 +277,6 @@ WavesetTransformer {
 						0;
 					});
 				}),[pi, 0, -pi]),
-
 				tri: Signal.sineFill(512, Array.fill(512, {
 					arg i;
 					i = i + 1;
@@ -301,15 +286,9 @@ WavesetTransformer {
 						0;
 					});
 				}),[pi/2]),
-
 				weirdTri: Signal.fill(512, {arg i;
 					(512%i)*0.01;
 				}),
-
-				clawNOISE: FloatArray.fill(512, {arg i;
-					var mod = poisson(i);
-					(512%mod)*(-1);
-				}).normalize(-1,1),
 			),
 
 

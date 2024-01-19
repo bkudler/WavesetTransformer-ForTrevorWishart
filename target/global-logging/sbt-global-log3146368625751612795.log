@@ -19,3 +19,5 @@
 [0m[[0m[32msuccess[0m] [0m[0mTotal time: 0 s, completed Jan 19, 2024, 4:34:44 PM[0m
 [0m[[0m[0mdebug[0m] [0m[0munmatched Done event for requestId None: None[0m
 [0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0msymbol multiLongSwapAmt[0m
+[0m[[0m[0mdebug[0m] [0m[0mlsp-definition locations Vector()[0m

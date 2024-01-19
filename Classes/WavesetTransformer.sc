@@ -289,10 +289,6 @@ WavesetTransformer {
 				weirdTri: Signal.fill(512, {arg i;
 					(512%i)*0.01;
 				}),
-				clawNOISE: FloatArray.fill(512, {arg i;
-					var mod = poisson(i);
-					(512%mod)*(-1);
-				}).normalize(-1,1),
 			),
 
 

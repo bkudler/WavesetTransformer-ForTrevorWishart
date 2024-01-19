@@ -21,3 +21,12 @@
 [0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
 [0m[[0m[0mdebug[0m] [0m[0msymbol multiLongSwapAmt[0m
 [0m[[0m[0mdebug[0m] [0m[0mlsp-definition locations Vector()[0m
+[0m[[0m[0mdebug[0m] [0m[0mlsp-definition json request: {"textDocument":{"uri":"file:///Users/bkudler/code-projects/waveset-holder/WavesetTransformer-ForTrevorWishart/Classes/WavesetTransformer.sc"},"position":{"line":289,"character":11}}[0m
+[0m[[0m[0mdebug[0m] [0m[0mlsp-definition found line: 					(512%i)*0.01;[0m
+[0m[[0m[0mdebug[0m] [0m[0mUnhandled notification received: $/cancelRequest: JsonRpcNotificationMessage(2.0, $/cancelRequest, {"id":13})[0m
+[0m[[0m[0mdebug[0m] [0m[0mlsp-definition json request: {"textDocument":{"uri":"file:///Users/bkudler/code-projects/waveset-holder/WavesetTransformer-ForTrevorWishart/Classes/WavesetTransformer.sc"},"position":{"line":292,"character":11}}[0m
+[0m[[0m[0mdebug[0m] [0m[0mlsp-definition found line: 					var mod = poisson(i);[0m
+[0m[[0m[0mdebug[0m] [0m[0msymbol mod[0m
+[0m[[0m[0mdebug[0m] [0m[0mlsp-definition locations Vector()[0m
+[0m[[0m[0mdebug[0m] [0m[0msymbol i[0m
+[0m[[0m[0mdebug[0m] [0m[0mlsp-definition locations Vector()[0m

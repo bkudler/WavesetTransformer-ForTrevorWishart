@@ -6,13 +6,15 @@ related:: Classes/Wavesets, Classes/WavesetTransformer
 DESCRIPTION::
 
 Some of the things happening in WavesetTransformer require verbose code, such as
+code::
 ```
 ~waveSetPlayer.shouldInterleaveOne = true;
 ~waveSetPlayer.interleaveOneLevel = 20;
 ~waveSetPlayer.interleaveOneNormLevel = 20;
 ~waveSetPlayer.shouldInterleaveOne = false;
 ```
-this class provides wrappers for that verbose code plus a smattering of presets to work with. This class is a living code base. If you find a great preset add it in to the class as a method. Scroll down to examples, copy and paste all of it into a new file for an explanation of each method and some fun.
+::
+this class provides wrappers for that verbose code plus a smattering of presets to work with. This class is a living code base. If a great preset is founded, please add it in to the class as a method.
 
 
 First code examples:
@@ -22,11 +24,9 @@ code::
 	\currSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
 	\leaveOneSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
 	\leaveTwoSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
-	\transferSetOne : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
-	\transferSetTwo : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\transferSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
 );
 ~moves = WavesetTransformerPlayer(20,~files);
-Synth(\eq,addAction:\addToTail);
 ~moves.go(1).play;
 ::
 
@@ -35,13 +35,10 @@ CLASSMETHODS::
 METHOD:: new
 argument:: subBufNum
 argument:: files
-
+argument:: wsOut
+argument:: mainOut
 
 INSTANCEMETHODS::
-
-METHOD:: returnTransferSetOne
-
-METHOD:: holderTransferSetTwo
 
 METHOD:: shrinkSets
 argument:: amt
@@ -96,8 +93,6 @@ argument:: multiplier
 argument:: plusAmount
 argument:: harmLevel
 
-METHOD:: returnTransferSetTwo
-
 METHOD:: speedRandom
 argument:: waitAmount
 argument:: speedStart
@@ -143,10 +138,6 @@ METHOD:: returnCurrSet
 METHOD:: silence
 
 METHOD:: freak
-
-METHOD:: playMode
-argument:: base
-argument:: waitAmount
 
 METHOD:: contBreak
 
@@ -224,19 +215,9 @@ METHOD:: funWithNorm
 
 METHOD:: drone
 
-METHOD:: changeTransferSetOne
-argument:: waveset
-
 METHOD:: breakBottom
 
 METHOD:: plotSub
-
-METHOD:: changeTransferSetTwo
-argument:: waveset
-
-METHOD:: transferSetsTwo
-argument:: transfer
-argument:: norm
 
 METHOD:: startFlop
 
@@ -246,17 +227,11 @@ argument:: waveStr
 METHOD:: changeLeaveOneSet
 argument:: waveset
 
-METHOD:: transferSetsOne
-argument:: transfer
-argument:: norm
-
 METHOD:: getRhythm
 
 METHOD:: rev
 
 METHOD:: transferBlang
-
-METHOD:: holderTransferSetOne
 
 METHOD:: shouldSwitchMode
 
@@ -292,6 +267,29 @@ METHOD:: norm
 
 METHOD:: contSpeedRandomBreak
 
+METHOD:: changeTransferSet
+
+METHOD:: fadeOut
+
+METHOD:: fxSwap
+
+METHOD:: holderTransferSet
+
+METHOD:: holderTransferSet
+
+METHOD:: longSwap
+
+METHOD:: multiLongSwap
+
+METHOD:: ramp
+
+METHOD:: repeatLongSwap
+
+METHOD:: returnTransferSet
+
+METHOD:: setSnapshot
+
+METHOD:: transferSets
 
 EXAMPLES::
 
@@ -300,354 +298,282 @@ code::
 	\currSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
 	\leaveOneSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
 	\leaveTwoSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
-	\transferSetOne : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
-	\transferSetTwo : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\transferSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
 );
-~moves = WavesetTransformerPlayer(20,~files);
+~inst = WavesetTransformerPlayer(20, ~files);
+
+i = ~inst.go(50000);
+i.play;
+
+//change the level of the sound, first is argument is multiplied by the amplitude, second is added to the amplitude
+~inst.ensound(0.85, 0.85);
+
+//fade to black
+~inst.fadeOut(4);
+
+//don't fade
+~inst.silence;
+
+//back to it
+~inst.ensound(0.85, 0.85);
+
+// find out what the current settings are
+~inst.takeSnapshot();
+~inst.showSnapshot();
+// back to normal
+~inst.norm();
+// set the settings to the last snap shot taken
+~inst.setSnapshot();
+
+//play a series of wavesets at the current speed and then a series at a different speed
+~inst.longSwap(10, 90, {rrand(0.2,3)});
+~inst.longSwap(10, 90, 2);
+~inst.ramp(\longSwapLevel, 20, 30);
+~inst.ramp(\longSwapNormLevel, 30, 200);
+~inst.ramp(\speedSwapAmt, 30, 5);
+~inst.waveset.shouldLongSwap = false;
+~inst.waveset.shouldLongSwap = true;
+
+//play a series of wavesets with the current multiplier and then a series at a different multiplier
+~inst.multiLongSwap(50, 90, 10);
+~inst.ramp(\multiLongSwapLevel, 20, 1);
+~inst.ramp(\multiLongSwapNormLevel, 30, 80);
+~inst.ramp(\multiSwapAmt, 5, 2);
+~inst.waveset.shouldMultiLongSwap = false;
+~inst.waveset.shouldMultiLongSwap = true;
+
+
+//play a series of wavesets with the current repeat amount and then a series of wavesets with a different repeat amount
+~inst.repeatLongSwap(10, 100, 5);
+~inst.ramp(\repeatSwapLevel, 1, 1);
+~inst.ramp(\repeatSwapNormLevel, 45, 500);
+~inst.ramp(\repeatSwapLev, 5, 0);
+~inst.waveset.shouldRepeatSwap = false;
+~inst.waveset.shouldRepeatSwap = true;
+
+// change the speed each waveset is played at
+~inst.waveset.baseSpeed = {1};
+~inst.ramp(\baseSpeed, 10, 10);
+~inst.waveset.baseSpeed.value();
+
+//change the amount of wavesets played each time
+~inst.waveset.waveSetAmount = {rrand(10,150)};
+~inst.waveset.waveSetAmount = {20};
+~inst.ramp(\waveSetAmount, 10, 200);
+~inst.waveset.waveSetAmount.value();
+
+// change the number of times each waveset is repeated
+~inst.waveset.repeats = {1};
+~inst.ramp(\repeats, 2, 1);
+~inst.waveset.repeats.value();
+
+// change the amount each waveset is multiplied by in length
+~inst.waveset.multiplier = {12.25};
+~inst.ramp(\multiplier, 2, 2.75);
+~inst.waveset.multiplier.value();
+
+// instead of multiplying, divide
+~inst.waveset.shouldSwap = true;
+~inst.waveset.shouldSwap = false;
+
+// change the amount of distance between the playing of each waveset
+~inst.waveset.distance = {0.1};
+~inst.ramp(\distance, 2, 0.0);
+~inst.waveset.distance.value();
+
+// place a series of waveset at a position in the stereo field and a number of wavesets in the opposite position of the stereo field
+~inst.customPan(1,1,1);
+~inst.ramp(\pan, 5, 0);
+~inst.ramp(\panLevel, 20, 90);
+~inst.ramp(\panNormLevel, 10, 2);
+
+// mess with the speed
+~inst.moduloSpeedChange(4, {5}, {0.09});
+~inst.waveset.speedChangeModulo = {~sax.waveset.currSet.xings.size*2}
+
+// every n wavesets play at a different speed
+~inst.speedSwap(2, 0.85);
+// stop doing the above
+~inst.waveset.speedSwapModulo = {~sax.waveset.currSet.xings.size*2};
+
+// back to the standard synth
+~inst.waveset.resetInst();
+// use a synth that modulates the start time of each waveset
+~inst.waveset.modulateStart();
+// use a synth that modulates the speed of each waveset
+~inst.waveset.modulateSpeed();
+// use a synth that modulates the start and speed
+~inst.waveset.moduleSpeedPlusStart();
+// modulate between the current set speed and the number set below
+~inst.waveset.speed2 = 10.85;
+~inst.ramp(\speed2, 30, 9.25);
+// modulate between the start and the number set below
+~inst.waveset.startModFreq = 1.55;
+~inst.ramp(\startModFreq, 30, 0.5);
+// the below setting changes how fast the start time is modulated
+~inst.waveset.startAmt = 8.25;
+~inst.ramp(\startAmt, 40, 1.25);
+
+// add an envelope to a a chunk of wavesets to produce phrases
+~inst.customPhrase(0.001, 0.01, 20, 120, 0.1);
+~inst.breakBottom = 10;
+~inst.breakTop = 50;
+~inst.waveset.breakAmount = {rrand(0.001, 0.02)};
+~inst.waveset.breakAmount = {0.5};
+
+~inst.ramp(\breakBottom, 30, 35);
+~inst.ramp(\breakTop, 30, 90);
+~inst.ramp(\breakAmount, 10, 0.1);
+
+~inst.waveset.decBreak = true;
+// stop making phrases
+~inst.waveset.decBreak = false;
+
+~inst.getRhythm();
+~inst.slowStrong();
+
+// change the speed, in a clear way, at a starting speed at a set interval
+~inst.playSeries(2,0.01);
+// mix up the order of the speeds
+~inst.shouldScrambleSeries = true;
+~inst.shouldScrambleSeries = false;
+~inst.shouldPlaySeries = false;
+~inst.shouldPlaySeries = true;
+
+// randomly change the speed at a set interval, leaning towards going up and down
+~inst.speedRandomDirect(8, 9.0, 9.0, 15.0, 1);
+~inst.contSpeedDirectBreak = false;
+
+// randomly change the speed at a set interval, without the leaning
+~inst.speedRandom(1,7,6,14);
+~inst.contSpeedRandomBreak = false;
+
+// randomly change the multiplier at a set inverval, leaning towards going up and down
+~inst.multiplierRandomDirect(0.1, 2, 0.9, 6.0, 1);
+~inst.contMultiplierDirectBreak = false;
+
+// randomly change the multiplier at a set interval, without the leaning
+~inst.multiplierRandom(0.01, 2.2, 0.9, 4);
+~inst.multiplierRandom(0.2,1,2,10);
+~inst.contMultiplierRandomBreak = false;
+
+// harmonize a chunk of wavesets, and not harmonize another chunk
+~inst.harmonizeSets({0.85}, 10, 10);
+~inst.ramp(\harmonizeLevel, 20, 10);
+~inst.ramp(\harmonizeNormLevel, 10, 5000);
+~inst.ramp(\harmLevel, 10, 0.75);
+~inst.waveset.shouldHarmonize = false;
+
+// remove a chunk of wavesets and then don't delete a chunk
+~inst.deleteSets(1, 5,false);
+~inst.ramp(\deleteLevel, 80, 50);
+~inst.ramp(\deleteNormLevel, 60, 20);
+~inst.randomDeleteSets(1, 5, false);
+~inst.waveset.shouldDelete = false;
+~inst.waveset.shouldRandomDelete = false;
+~inst.waveset.shouldDeletePause = true;
+~inst.waveset.shouldDeletePause = false;
+
+// remove all wavesets below a certain threshold
+~inst.shrinkSets(3.2);
+~inst.ramp(\shrinkAmt, 30, 1.2);
+~inst.waveset.shouldShrink = false;
+
+// mix up the wavesets using the adjacent n wavesets
+~inst.shuffleSets({30});
+~inst.ramp(\shuffAmount, 20, 10);
+~inst.waveset.shouldShuffle = false;
+
+// reverse a series of wavesets and then don't reverse a series
+~inst.reverseSets(100, 50);
+~inst.ramp(\reverseLevel, 10, 20);
+~inst.ramp(\reverseNormLevel, 10, 50);
+~inst.waveset.shouldReverse = false;
+
+// transfer the amplitude of the transfer set to the current set (won't do anything because all the waveset files are the same)
+~inst.transferSets(1, 1);
+~inst.ramp(\transferLevel, 5, 10);
+~inst.ramp(\transferNormLevel, 70, 100);
+~inst.waveset.shouldTransfer = false;
+
+// interleave the wavesets from interleave sets one with the wavesets in the current file
+~inst.interleaveSetsOne(1, 1);
+~inst.ramp(\interleaveOneLevel, 100, 50);
+~inst.ramp(\interleaveOneNormLevel, 50, 500);
+~inst.waveset.shouldInterleaveOne = false;
+
+// interleave the wavesets from interleave sets two with the wavesets in the current file
+~inst.interleaveSetsTwo(3, 3);
+~inst.ramp(\interleaveTwoLevel, 50, 10);
+~inst.ramp(\interleaveTwoNormLevel, 20, 900);
+~inst.waveset.shouldInterleaveTwo = false;
+
+// set a series of wavesets to the fx bus and then a series to the normal bus
+~inst.fxSwap(50, 10);
+~inst.ramp(\fxLevel, 10, 1);
+~inst.ramp(\fxNormLevel, 10, 3);
+~inst.waveset.shouldFx = false;
+
+// set a series of wavesets' amplitude to a normal level
+~inst.normalizeSets(20, 0.1);
+~inst.ramp(\normalizeAmount, 200, 1);
+~inst.ramp(\normalizeThresh, 200, 1);
+~inst.waveset.shouldNormalize = false;
+
+// substitute a given waveform for a series of wavesets and then use the regular waveform for a series of wavesets
+~inst.waveset.waveSubMod = {2000};
+~inst.waveset.waveSubMod =  {~sax.waveset.currSet.xings.size};
+~inst.ramp(\waveSubMod, 3, 90);
+~inst.subSets(10, 10);
+~inst.ramp(\subLevel, 30, 1);
+~inst.ramp(\subNormLevel, 90, 200);
+~inst.waveset.shouldSub = false;
+~inst.waveset.waves.showKeys();
+~inst.changeSubWave('crazyu');
+~inst.waveset.randomWave();
+~inst.waveset.subBuf.plot
+
+// Different events in the lifecycle of the playback of the wavesets send out triggers, so things can be programmed to happen at differnet points in the lifecycle
+
+// for instance playing a sound at the end of each run of the waveset
 
 (
-//send a random wave from the waves you injected into waveSetPlayer to the subBuf so you have waveforms to substitute in later... just trust me.
-~moves.randomWave();
-//plot it;
-~moves.plotSub()
+SynthDef(\test_scout,{
+
+	var env = EnvGen.ar(Env([0,1,0],[0.01,0.25]),doneAction:2);
+
+	var in = SinOsc.ar*env;
+
+	Out.ar(0,Pan2.ar(in));
+
+}).add;
 )
 
-//get all of the waveforms that come with the transformer
-~moves.waveset.waves.showKeys
-//pick one
-~moves.changeSubWave('sqr');
-//only show a few waves
-~moves.waveset.waves.showKeys(3);
-
-//start playing the wavesets from your current waveset signal back
-~waveSetPlayerLimiter = Synth(\eq,addAction:\addToTail);
-~moves.go(100).play;
-//I added in a basic limiter for convenience, everything is routed through it, you can change how it works in the other file or you can change the out of the waveset SynthDefs and then do whatever you want.
-~moves.waveset.out = 10;
-~waveSetPlayerLimiter.set(\in, 10);
-//delay listening on bus 20
-SynthDef(\wsDelay,{
-	var out = CombC.ar(
-		In.ar(
-			20,
-			2
-		),
-		0.2,
-		0.5,
-		10
-	);
-	Out.ar(0,Pan2.ar(out, level:0.5));
-}).add;
-//play an instance of it at the tail
-Synth(\wsDelay, addAction:\addToTail);
-//route the limiter through it
-~waveSetPlayerLimiter.set(\out, 20);
-//back to normal
-~waveSetPlayerLimiter.set(\out, 0);
-//route the player through it, i.e. get rid of the limiter;
-~moves.waveset.out = 20;
-//back to normsies
-~waveSetPlayerLimiter.set(\in, 5);
-~moves.waveset.out = 5;
-
-
-
-~moves.changeCurrSet(Wavesets.from(String.scDir +/+ "sounds/a11wlk01-44_1.aiff"));
-~moves.waveset.switchSet = false;
-~moves.returnCurrSet();
-
-//none of this will do something unless you replace the argument to from
-~moves.changeLeaveOneSet(Wavesets.from(~files.leaveTwoSet));
-~moves.returnLeaveOneSet();
-
-~moves.changeLeaveTwoSet(Wavesets.from(~files.leaveOneSet));
-~moves.returnLeaveTwoSet();
-
-~moves.changeTransferSetOne(Wavesets.from(~files.transferSetOne));
-~moves.returnTransferSetOne();
-
-~moves.changeTransferSetTwo((Wavesets.from(~files.leaveOneSet));
-~moves.returnTransferSetTwo();
-
-//lets have some fun!
-//change the instrument being used to play the individual wavesets, this will modulate the starting point as each waveset is being played
-~moves.waveset.modulateStart();
-//frequency of modulation
-~moves.waveset.startModFreq = 0.2;
-//the range of modulation, 1 is modulation from current starting point to current start + current start to current start - current start. 0.5 is is modulation from current start to currentStart + current start * 0.5 to currentStart - current start * 0.5 etc...
-~moves.waveset.startAmt = 1.5;
-
-//change the instrument being used to play the individual wavesets, this will modulate the speed of the waveset as each is being played
-~moves.waveset.modulateSpeed();
-~moves.waveset.speed2 = 10.5;
-
-//both speed and start modulation
-~moves.waveset.moduleSpeedPlusStart();
-
-//back to regular instrument
-~moves.waveset.resetInst();
-
-~moves.waveset.baseSpeed = {3};
-~moves.waveset.baseSpeed.value();
-~moves.waveset.baseSpeed = {1};
-
-//change the amount of wavesets played for every waveset, so play 5 wavesets in the space of 1 waveset.
-~moves.waveset.waveSetAmount = {200};
-~moves.waveset.waveSetAmount = {1};
-
-~moves.waveset.multiplier = {3};
-~moves.waveset.multiplier = {1};
-
-
-~moves.waveset.shouldAverage = true;
-~moves.waveset.averageModulo = 5;
-//back to normal
-~moves.waveset.shouldAverage = false;
-
-~moves.waveset.shouldSwap = true;
-~moves.waveset.multiplier = {3.0};
-~moves.waveset.shouldSwap = false;
-~moves.waveset.multiplier = {1};
-
-//set volume (multiply, add);
-~moves.ensound(1,2);
-//no sound
-~moves.silence()
-
-//everything back to normal
-~moves.norm();
-
-~moves.waveset.speedSwapModulo = 5;
-~moves.waveset.speedSwapAmt = 3;
-~moves.waveset.shouldShuffle = true;
-~moves.waveset.shuffAmount = 60;
-~moves.waveset.modulateStart();
-~moves.waveset.waveSetAmount = {30};
-
-
-~moves.norm();
-
-
-//PRESETS
-//THE FOLLOWING ARE DIFFERENT COMBINATIONS OF TRNASFORMATIONS I HAVE FOUND COOL:
-~moves.climb();
-
-//multiplier, plusAmount, harmLevel
-~moves.humm();
-~moves.humm(0.3, 0.5, 0.8);
-~moves.humm(2, 0.1, 0.9);
-
-~moves.rev();
-
-~moves.blow();
-
-//multiplier
-~moves.slurp();
-~moves.slurp(1);
-~moves.slurp(4);
-~moves.slurp(0.8);
-
-~moves.vasilate();
-
-//baseSpeed. multiplier
-~moves.sayWow();
-~moves.sayWow(10,3);
-~moves.sayWow(7,0.8);
-~moves.sayWow(rrand(2,9),0.2);
-~moves.sayWow(rrand(3,8), 2.25);
-~moves.sayWow(rrand(3,8), 0.5);
-
-//multiplier, waveSetAmount
-~moves.biter();
-~moves.biter(3,20);
-~moves.biter(10,20);
-~moves.biter(10,10);
-~moves.biter(12,7);
-
-
-//multiplier, waveSetAmount
-~moves.biterSub()
-~moves.biterSub(3,20);
-~moves.biterSub(10,20);
-~moves.biterSub(10,10);
-
-~moves.crankThatSoulja();
-
-~moves.wrinkle();
-
-~moves.sputter();
-
-~moves.drone();
-
-~moves.cook();
-
-~moves.funWithNorm();
-
-~moves.freak();
-
-~moves.bleepAbout();
-
-~moves.subZipper();
-
-~moves.subAndBlop();
-
-//won't work unless you replace transferSetTwo
-~moves.transferBlang();
-
-//this is helpful it just sets everything back to normal
-~moves.norm();
-
-
-//convenience wrapper for doing modulo speed change stuff. instead of having to assign the modulo, modamt, and plusAmt separetly can do it all at once
-~moves.moduloSpeedChange(3,5,0.01);
-~moves.moduloSpeedChange(2,20,0.01);
-~moves.moduloSpeedChange(2,40,0.01);
-~moves.moduloSpeedChange(10,20,0.05);
-
-//convenience wrapper for speedSwapping, same as above, but with speed swapping
-~moves.speedSwap(3, 0.5);
-~moves.speedSwap(2, 4.5);
-~moves.speedSwap(10, 13);
-
-//convenience for shuffling wavesets, just have to give an amount
-~moves.shuffleSets(10);
-~moves.shuffleSets(60);
-~moves.norm();
-
-//conveninece for deleting setts, just have to give delete amount, norm amount, and if you want to pause for each delete amount.
-~moves.deleteSets(3,3,false);
-~moves.deleteSets(3,3,true);
-~moves.deleteSets(30,3,true);
-
-//the following are all convenience methods for what the name of the method would apply
-
-~moves.randomDeleteSets(4,3,true);
-~moves.randomDeleteSets(2,1,false);
-
-~moves.subSets(3,3);
-~moves.subSets(20,30);
-~moves.subSets(20,0);
-~moves.subSets(3,0);
-~moves.norm();
-
-~moves.reverseSets(5,5);
-~moves.reverseSets(5,0);
-~moves.reverseSets(10,10);
-
-~moves.harmonizeSets(0.8,3,3);
-~moves.harmonizeSets(0.2,3,0);
-~moves.harmonizeSets(0.2,3,2);
-
-//won't work unless you replace transferSetOne with something
-~moves.transferSetsOne(3,3);
-~moves.transferSetsOne(3,0);
-
-//won't work unless you replace shouldTransferTwo with something
-~moves.transferSetsTwo(3,3);
-~moves.transferSetsTwo(3,0);
-
-//won't work unless you replace leaveOneSet with something
-~moves.interleaveSetsOne(3,3);
-~moves.interleaveSetsOne(1,1);
-
-//won't work unless you replace leaveTwoSet with something
-~moves.interleaveSetsTwo(3,3);
-~moves.interleaveSetsTwo(3,1);
-~moves.interleaveSetsTwo(1,1);
-
-~moves.normalizeSets(3,0.5);
-~moves.normalizeSets(2,0.1);
-~moves.normalizeSets(8,0.9);
-
-~moves.shrinkSets(2);
-~moves.shrinkSets(0.5);
-~moves.norm();
-
-~moves.customPan(2,2,-1);
-~moves.customPan(90,90,-1);
-~moves.customPan(500,90,1);
-~moves.customPan(90,3,1);
-~moves.customPan(90,3,0);
-
-//THIS ALLOWS FOR SETTING A CRUDE AMPLITUDE ENVELOPE ON THE TRAIN OF WAVESETS WITH PHRASING
-//minimum waittime before starting train again, maximum waittime before starting train again, minimum of amount wavesets to play, max amount of wavesets to play, amount of time before changing amountof wavesets
-~moves.customPhrase(0.001,0.4,90,220,0.1);
-~moves.contBreak = false;
-~moves.customPhrase(0.001, 0.8, 100, 900, 0.1);
-~moves.contBreak = false;
-~moves.customPhrase(0.005,1, 50,550, 4);
-
-~moves.waveset.decBreak = false;
-~moves.ensound(1,5);
-
-
-//plays a specific and idiomatic series that I amde starting on a certain playback speed
-​~moves.shouldPlaySeries = true;
-~moves.playSeries(2,0.01);
-~moves.playSeries(5,0.1);
-~moves.playSeries(5,1);
-~moves.shouldScrambleSeries = true;
-~moves.shouldScrambleSeries = false;
-~moves.shouldPlaySeries = false;
-
-//play a random one of the following scales/modes: major, minor, aeolian, and dorian. Doesn't really work, but can be cool depending on the sound file you are working with.
-~moves.shouldPlayMode = true;
-~moves.playMode(2,0.01);
-~moves.playMode(5,0.1);
-~moves.playMode(0.8,1);
-~moves.shouldSwitchMode = false;
-~moves.shouldPlayMode = false;
-
-//randomly change the speed leaning towards higher or lower, 1 as the last argument is lean towards going higher, 0 is lean towards going lower.
-~moves.contSpeedDirectBreak = true;
-~moves.contSpeedDirectBreak = false;
-~moves.speedRandomDirect.value(0.01,3,2,5,1);
-~moves.speedRandomDirect(0.1,0.8,2,5,1);
-~moves.speedRandomDirect(1,5,2,10,0);
-~moves.speedRandomDirect(0.1,3,2,5,1);
-~moves.speedRandomDirect(0.1,3,2,5,0);
-~moves.norm();
-//same as above but with no choice in leaning to go up or down
-~moves.contSpeedRandomBreak = true;
-~moves.speedRandom(0.1,3,2,5);
-~moves.speedRandom(1,5,2,10);
-~moves.speedRandom(0.1,0.8,2,5);
-​
-
-//same as speedRandomDirect but with mulitiplier
-~moves.contMultiplierDirectBreak = true;
-~moves.multiplierRandomDirect(0.01,3,2,5,1);
-~moves.multiplierRandomDirect(0.1,0.8,2,5,1);
-~moves.multiplierRandomDirect(1,5,2,10,0);
-~moves.multiplierRandomDirect(0.1,3,2,5,1);
-~moves.multiplierRandomDirect(0.1,3,2,5,0);
-
-
-//same as above but with no choice in leaning to go up or down
-~moves.contMultiplierRandomBreak = true;
-~moves.contMultiplierRandomBreak = false;
-~moves.multiplierRandom(0.1,3,2,5);
-~moves.multiplierRandom(1,5,2,10);
-~moves.multiplierRandom(0.1,0.8,2,5);
-~moves.waveset.multiplier.value();
-~moves.norm();
-
-//hey just try it.
-~moves.startFlop();
-
-~moves.norm();
-//these are phrase based, meaning they will make different amplitude based patterns or phrases
-~moves.getRhythm();
-~moves.slowStrong();
-
-//okay, so say you got some nice situation and everything is sounding good, you want to know what everything is so that you can use it for later or even add it in is as your own preset.... well...
-~moves.takeSnapshot();
-//this will save everything in a dictionary on your WavesetTransformerPlayer called snapshot... okay that's too complicated, just give me the info
-~moves.showSnapshot();
-//you can't have more than one snapshot at once, sadly, but you can also just do...
-~tempSnapShot = Event.newFrom(~moves.snapShot);
-//then when you are ready to pretty print it just do
-~moves.snapShot = ~tempSnapShot;
-~moves.showSnapshot();
-
+(
+~test = {~inst.waveset.ws_scout.set_actions( (
+	\wavesetEnd:[
+		{arg val;}
+	],
+	\wavesetGroupStart: [{
+		{"GROUP START".postln;}
+
+	}],
+	\wavesetGroupEnd: [
+		{"GROUP END".postln;},
+	],
+	\rampEnds:[
+		{"RAMP END".postln;},
+	],
+	\wavesetLoopEnd:[
+		{"WAVESET LOOP END".postln},
+		{Synth(\test_scout)}
+	],
+	\wavesetLoopsFinshed:[
+		{"ALL DONE".postln;}
+	],
+)
+)};
+)
+
+~test.value();
 ::

@@ -1,0 +1,80 @@
+TITLE:: WavesetTransformerScout
+summary:: scouts on events that the waveset transformer emits
+categories:: wavesets, microsound
+related:: Classes/Wavesets, Classes/WavesetTransformer
+
+DESCRIPTION::
+
+See the parent class for methods. Tutorials for WavesetTransformerPlayer explain usage of this class in depth, still there is one example here
+
+CLASSMETHODS::
+
+METHOD:: new
+
+INSTANCEMETHODS::
+
+METHOD:: prActionNotUnderstoodError
+
+METHOD:: init
+
+
+EXAMPLES::
+
+code::
+// create a WavesetTransformerPlayer
+~files = (
+	\currSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\leaveOneSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\leaveTwoSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+	\transferSet : String.scDir +/+ "sounds/a11wlk01-44_1.aiff",
+);
+~moves = WavesetTransformerPlayer(20,~files);
+// get some sound from the WavesetTransformerPlayer
+~moves.go(100).play;
+
+// basic SynthDef
+
+(
+SynthDef(\test_scout,{
+
+	var env = EnvGen.ar(Env([0,1,0],[0.01,0.25]),doneAction:2);
+
+	var in = SinOsc.ar*env;
+
+	Out.ar(0,Pan2.ar(in));
+
+}).add;
+)
+
+// a function that will add a bunch of actions to the Scout. When the action occurs it will print the name of the action, when the waveset loop ends it will play the SynthDef above
+
+(
+~test = {~inst.waveset.ws_scout.set_actions( (
+	\wavesetEnd:[
+		{arg val;}
+	],
+	\wavesetGroupStart: [{
+		{"GROUP START".postln;}
+
+	}],
+	\wavesetGroupEnd: [
+		{"GROUP END".postln;},
+	],
+	\rampEnds:[
+		{"RAMP END".postln;},
+	],
+	\wavesetLoopEnd:[
+		{"WAVESET LOOP END".postln},
+		{Synth(\test_scout)}
+	],
+	\wavesetLoopsFinshed:[
+		{"ALL DONE".postln;}
+	],
+)
+)};
+)
+
+// call the function to add all of the actions
+
+~test.value();
+::
